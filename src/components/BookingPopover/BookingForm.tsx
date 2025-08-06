@@ -28,6 +28,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
   });
 
   const onSubmit = async (data: BookingFormData) => {
+    // Check if there are any validation errors
+    if (Object.keys(errors).length > 0) {
+      const firstError = Object.values(errors)[0];
+      onError(firstError?.message || 'Please check the form for errors');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -76,6 +83,27 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Form Validation Errors Summary */}
+      {Object.keys(errors).length > 0 && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-4 w-4 text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-2">
+              <h4 className="text-sm font-medium text-red-800 font-mono">Please fix the following errors:</h4>
+              <ul className="mt-1 text-xs text-red-700 font-mono space-y-1">
+                {Object.entries(errors).map(([field, error]) => (
+                  <li key={field}>• {error?.message}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Honeypot field - hidden from users */}
       <input
         {...register('honeypot')}

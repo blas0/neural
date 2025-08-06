@@ -135,7 +135,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   onCTAClick,
   onRoadmapClick,
   logoText = 'neurix',
-  ctaText = 'Book a Call',
+  ctaText = 'book a call',
   isFixed = true
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

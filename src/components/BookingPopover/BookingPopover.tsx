@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useFloating, autoUpdate, offset, flip, shift, hide } from '@floating-ui/react';
+// Removed floating-ui import as we're centering in viewport instead
 import { X, CheckCircle, AlertCircle } from 'lucide-react';
 import BookingForm from './BookingForm';
 import { BookingPopoverProps, FormSubmissionResponse } from './BookingPopover.types';
@@ -16,26 +16,7 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
   const popoverRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
-  // Floating UI setup
-  const { refs, floatingStyles, context } = useFloating({
-    placement: 'bottom',
-    open: isOpen,
-    onOpenChange: onClose,
-    middleware: [
-      offset(10),
-      flip({ padding: 10 }),
-      shift({ padding: 10 }),
-      hide({ padding: 10 })
-    ],
-    whileElementsMounted: autoUpdate,
-  });
-
-  // Set the reference element
-  useEffect(() => {
-    if (triggerElement) {
-      refs.setReference(triggerElement);
-    }
-  }, [triggerElement, refs]);
+  // No longer need floating UI setup - centering in viewport instead
 
   // Handle escape key and backdrop clicks
   useEffect(() => {
@@ -114,8 +95,6 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
     >
       <div
-        ref={refs.setFloating}
-        style={floatingStyles}
         className="relative w-full max-w-md mx-auto"
       >
         <div

@@ -28,10 +28,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         block: 'start'
       });
     }
-    
-    if (onCTAClick) {
-      onCTAClick(event);
-    }
   };
   return (
     <section className={`min-h-screen bg-stone-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 ${className}`}>

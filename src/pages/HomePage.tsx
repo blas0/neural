@@ -21,9 +21,7 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
 
   return (
     <div className="pt-16 sm:pt-20">
-      <div className="fade-in-sequential fade-in-toast">
-        <WeatherTimeToast />
-      </div>
+
       <section id="top" className="fade-in-sequential fade-in-hero">
         <HeroSection onCTAClick={handleCTAClick} />
       </section>
@@ -39,10 +37,15 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
       <section id="pricing" className="fade-in-sequential fade-in-pricing">
         <PricingStructure onBookCall={onBookCall} />
       </section>
-      <footer className="fade-in-sequential fade-in-footer py-8 text-center text-sm text-stone-400">
+      <footer className="fade-in-sequential fade-in-footer py-8 text-sm text-stone-400">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="footer-animated">
-            © 2025 neurix | made w luv in pdx, or
+          <div className="flex justify-between items-center">
+            <div className="footer-weather">
+              <WeatherTimeToast />
+            </div>
+            <div className="footer-animated text-center flex-1">
+              © 2025 neurix | made w luv in pdx, or
+            </div>
           </div>
         </div>
       </footer>

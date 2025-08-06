@@ -35,7 +35,7 @@ const BookingFormSchema = z.object({
     .or(z.literal('')),
   
   tier: z.enum(['tier-1', 'tier-2', 'tier-3'], {
-    errorMap: () => ({ message: 'Please select a valid tier' })
+    message: 'Please select a valid tier'
   }),
   
   message: z.string()
@@ -245,7 +245,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         success: false,
         error: 'Validation failed',
         message: 'Please check your form data and try again.',
-        details: error.errors.map(e => ({
+        details: error.issues.map((e: z.ZodIssue) => ({
           field: e.path.join('.'),
           message: e.message
         }))
