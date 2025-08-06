@@ -27,7 +27,7 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Update time every second
+  // Update time every second (Portland, OR timezone)
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -35,7 +35,8 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
         hour12: true,
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
+        timeZone: 'America/Los_Angeles' // Portland, OR timezone (Pacific)
       });
       setCurrentTime(timeString);
     };
@@ -46,19 +47,13 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
     return () => clearInterval(interval);
   }, []);
 
-  // Get user's location and weather
+  // Get Portland, OR weather
   useEffect(() => {
     const getWeatherData = async () => {
       try {
-        // Get user's location
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            timeout: 10000,
-            enableHighAccuracy: false
-          });
-        });
-
-        const { latitude, longitude } = position.coords;
+        // Portland, OR coordinates
+        const latitude = 45.5152;
+        const longitude = -122.6784;
 
         // Try to get weather from OpenWeatherMap (free tier)
         // Note: In production, you'd want to store the API key securely
@@ -74,20 +69,17 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
             setWeather({
               temperature: Math.round(weatherData.main.temp),
               condition: weatherData.weather[0].main.toLowerCase(),
-              location: weatherData.name
+              location: 'Portland, OR'
             });
           } else {
             throw new Error('Weather API failed');
           }
         } catch (apiError) {
-          // Fallback to IP-based location and mock weather
-          const ipResponse = await fetch('https://ipapi.co/json/');
-          const ipData = await ipResponse.json();
-          
+          // Fallback to mock Portland weather
           setWeather({
-            temperature: Math.floor(Math.random() * 30) + 50, // Random temp between 50-80°F
+            temperature: Math.floor(Math.random() * 20) + 60, // Random temp between 60-80°F (typical Portland range)
             condition: ['clear', 'clouds', 'rain', 'drizzle'][Math.floor(Math.random() * 4)],
-            location: ipData.city || 'Current Location'
+            location: 'Portland, OR'
           });
         }
         
@@ -96,9 +88,9 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
         console.error('Error getting weather data:', error);
         // Ultimate fallback data
         setWeather({
-          temperature: 72,
-          condition: 'clear',
-          location: 'Location Unavailable'
+          temperature: 68,
+          condition: 'clouds',
+          location: 'Portland, OR'
         });
         setLoading(false);
       }
@@ -139,7 +131,7 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
     return (
       <div className={`flex justify-center py-4 bg-transparent ${className}`}>
         <div 
-          className="bg-stone-50/90 backdrop-blur-sm border border-stone-200 rounded-full px-4 py-2 shadow-lg"
+          className="bg-stone-50/90 backdrop-blur-sm border border-stone-200 rounded-full px-4 py-2"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           <span className="text-xs text-zinc-500">loading...</span>
@@ -151,7 +143,7 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
   return (
     <div className={`flex justify-center py-4 bg-transparent ${className}`}>
       <div 
-        className="bg-stone-50/90 backdrop-blur-sm border border-stone-200 rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        className="bg-stone-50/90 backdrop-blur-sm border border-stone-200 rounded-full px-4 py-2"
         style={{ fontFamily: 'IBM Plex Mono, monospace' }}
       >
         <div className="flex items-center space-x-3 text-xs">

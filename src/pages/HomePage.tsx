@@ -3,6 +3,8 @@ import HeroSection from '../../HeroSection';
 import DataNoiseSection from '../components/DataNoiseSection';
 import OverviewOfServices from '../../OverviewOfServices';
 import WeatherTimeToast from '../../WeatherTimeToast';
+import RoadmapJourney from '../../RoadmapJourney';
+import PricingStructure from '../../PricingStructure';
 
 
 const HomePage: React.FC = () => {
@@ -15,12 +17,26 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <>
-      <WeatherTimeToast />
-      <HeroSection onCTAClick={handleCTAClick} />
-      <DataNoiseSection />
-      <OverviewOfServices onLearnMore={handleLearnMore} />
-    </>
+    <div className="pt-16 sm:pt-20">
+      <div className="fade-in-sequential fade-in-toast">
+        <WeatherTimeToast />
+      </div>
+      <section id="top" className="fade-in-sequential fade-in-hero">
+        <HeroSection onCTAClick={handleCTAClick} />
+      </section>
+      <div className="fade-in-sequential fade-in-noise">
+        <DataNoiseSection />
+      </div>
+      <section id="about" className="fade-in-sequential fade-in-services">
+        <OverviewOfServices onLearnMore={handleLearnMore} />
+      </section>
+      <section id="roadmap" className="fade-in-sequential fade-in-roadmap">
+        <RoadmapJourney />
+      </section>
+      <section id="pricing" className="fade-in-sequential fade-in-pricing">
+        <PricingStructure />
+      </section>
+    </div>
   );
 };
 

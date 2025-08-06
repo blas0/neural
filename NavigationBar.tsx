@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationBarProps, MobileMenuProps } from './NavigationBar.types';
 
-
 // Mobile Menu Component
 const MobileMenu: React.FC<MobileMenuProps> = ({
   isOpen,
@@ -52,10 +51,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       }`}
     >
       {/* Backdrop */}
-      <div
-        className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-          isOpen ? 'opacity-50' : 'opacity-0'
-        }`}
+      <div 
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm"
         onClick={onClose}
       />
       
@@ -81,20 +78,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         {/* Navigation Items */}
         <nav className="px-6 space-y-8" style={{ fontFamily: 'IBM Plex Mono, monospace' }}>
           <button
-            onClick={() => {
-              const pricingSection = document.getElementById('pricing');
-              if (pricingSection) {
-                pricingSection.scrollIntoView({ behavior: 'smooth' });
-              }
-              onClose();
-            }}
+            onClick={handlePricingClick}
             className="block w-full text-left text-2xl font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 py-3 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
           >
             pricing
           </button>
           
           <button
-            onClick={onClose}
+            onClick={handleAboutClick}
             className="block w-full text-left text-2xl font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 py-3 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
           >
             about
@@ -110,7 +101,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           {/* Mobile CTA */}
           <div className="pt-8">
             <button
-              onClick={onClose}
+              onClick={handleCTAClick}
               className="group w-full inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-all duration-300 ease-out hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50"
             >
               book a call
@@ -149,21 +140,23 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Trigger navbar animation on mount
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       setIsScrolled(scrollTop > 20);
+      
+      // Calculate opacity based on scroll position (0.85 to 1.0 range for better visibility)
+      const maxScroll = 300; // Maximum scroll distance for opacity transition
+      const minOpacity = 0.85; // Increased to 0.85 for optimal visibility
+      const maxOpacity = 1.0;
+      const opacity = Math.max(
+        minOpacity, 
+        maxOpacity - (scrollTop / maxScroll) * (maxOpacity - minOpacity)
+      );
+      setScrollOpacity(opacity);
     };
 
     if (isFixed) {
@@ -203,13 +196,20 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   return (
     <>
       <nav
-        className={`w-full transition-all duration-300 ease-out z-40 ${
+        className={`w-full transition-all duration-300 ease-out z-50 ${
           isFixed ? 'fixed top-0 left-0 right-0' : 'relative'
         } ${
           isScrolled && isFixed
-            ? 'bg-stone-50/95 backdrop-blur-sm shadow-sm'
+            ? 'bg-stone-50 backdrop-blur-sm shadow-sm'
             : 'bg-stone-50'
         } ${className}`}
+        style={{ 
+          opacity: scrollOpacity,
+          position: isFixed ? 'fixed' : 'relative',
+          top: isFixed ? 0 : 'auto',
+          left: isFixed ? 0 : 'auto',
+          right: isFixed ? 0 : 'auto'
+        }}
       >
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ease-out ${
           isVisible 
@@ -232,12 +232,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
               <button
-                onClick={() => {
-                  const pricingSection = document.getElementById('pricing');
-                  if (pricingSection) {
-                    pricingSection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={handlePricingClick}
                 className="text-lg font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
               >
@@ -245,6 +240,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               </button>
               
               <button
+                onClick={handleAboutClick}
                 className="text-lg font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
               >
@@ -258,15 +254,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               >
                 roadmap
               </button>
-            </div>
 
-            {/* Desktop CTA */}
-            <div className="hidden lg:flex">
+              {/* CTA Button */}
               <button
-                className="group inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-all duration-300 ease-out hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50"
+                onClick={handleCTAClick}
+                className="group inline-flex items-center px-6 py-3 text-base font-medium text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-all duration-300 ease-out hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
               >
-                book a call
+                {ctaText}
                 <svg 
                   className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
                   fill="none" 
@@ -288,20 +283,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               <button
                 onClick={toggleMobileMenu}
                 className="p-2 text-zinc-800 hover:text-zinc-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
-                aria-label="Open navigation menu"
-                aria-expanded={isMobileMenuOpen}
+                aria-label="Toggle navigation menu"
               >
-                <svg 
-                  className={`w-6 h-6 transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : ''}`} 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path 
                     strokeLinecap="round" 
                     strokeLinejoin="round" 
                     strokeWidth={2} 
-                    d="M4 6h16M4 12h16M4 18h16" 
+                    d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} 
                   />
                 </svg>
               </button>
@@ -311,13 +300,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
       </nav>
 
       {/* Mobile Menu */}
-      <MobileMenu
+      <MobileMenu 
         isOpen={isMobileMenuOpen}
         onClose={closeMobileMenu}
         onPricingClick={onPricingClick}
         onAboutClick={onAboutClick}
-        onCTAClick={onCTAClick}
         onRoadmapClick={onRoadmapClick}
+        onCTAClick={onCTAClick}
       />
 
       {/* Spacer for fixed navigation */}

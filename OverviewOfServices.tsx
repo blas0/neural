@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import DesignImpactVisualization from './DesignImpactVisualization';
-import RoadmapJourney from './RoadmapJourney';
-import PricingStructure from './PricingStructure';
 import { OverviewOfServicesProps, ServiceCard } from './OverviewOfServices.types';
 
 const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
@@ -140,36 +138,6 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
           />
         </div>
 
-        {/* Roadmap Journey Section */}
-        <div className={`mt-32 transition-all duration-1000 ease-out delay-1500 ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
-          <RoadmapJourney 
-            width={900} 
-            height={200}
-            className="w-full"
-          />
-        </div>
-
-        {/* Static Gradient Dividing Line */}
-        <div className={`mt-56 mb-8 flex justify-center transition-all duration-1000 ease-out delay-1750 ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
-          <div className="w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-        </div>
-
-        {/* Pricing Structure Section */}
-        <div className={`transition-all duration-1000 ease-out delay-2000 ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
-          <PricingStructure className="w-full" />
-        </div>
       </div>
     </section>
   );
