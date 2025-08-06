@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TV Static Section Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .animate-tv-static-1,
+  .animate-tv-static-2,
+  .animate-tv-static-3 {
+    animation: none !important;
+  }
+}
+
+/* Enhanced text shadow for better readability over static */
+.tv-static-text {
+  text-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(0, 0, 0, 0.7),
+    2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Subtle glow effect for the text when static is active */
+@keyframes subtle-glow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px rgba(255, 255, 255, 0.1),
+      0 0 20px rgba(255, 255, 255, 0.05),
+      0 0 30px rgba(255, 255, 255, 0.02),
+      2px 2px 4px rgba(0, 0, 0, 0.9);
+  }
+  50% { 
+    text-shadow: 
+      0 0 15px rgba(255, 255, 255, 0.15),
+      0 0 25px rgba(255, 255, 255, 0.1),
+      0 0 35px rgba(255, 255, 255, 0.05),
+      2px 2px 4px rgba(0, 0, 0, 0.9);
+  }
+}
+
+.tv-static-glow {
+  animation: subtle-glow 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-static-glow {
+    animation: none;
+  }
+}
+
+/* Professional Animated Gradient Dividing Line */
+.gradient-divider {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(24, 24, 27, 0.08) 15%,
+    rgba(24, 24, 27, 0.2) 25%,
+    rgba(39, 39, 42, 0.4) 35%,
+    rgba(63, 63, 70, 0.6) 45%,
+    rgba(82, 82, 91, 0.8) 50%,
+    rgba(63, 63, 70, 0.6) 55%,
+    rgba(39, 39, 42, 0.4) 65%,
+    rgba(24, 24, 27, 0.2) 75%,
+    rgba(24, 24, 27, 0.08) 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientFlow 4s ease-in-out infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(24, 24, 27, 0.08) 15%,
+      rgba(24, 24, 27, 0.2) 25%,
+      rgba(39, 39, 42, 0.4) 35%,
+      rgba(63, 63, 70, 0.6) 45%,
+      rgba(82, 82, 91, 0.8) 50%,
+      rgba(63, 63, 70, 0.6) 55%,
+      rgba(39, 39, 42, 0.4) 65%,
+      rgba(24, 24, 27, 0.2) 75%,
+      rgba(24, 24, 27, 0.08) 85%,
+      transparent 100%
+    );
+  }
+  25% {
+    background-position: 25% 50%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(39, 39, 42, 0.1) 15%,
+      rgba(63, 63, 70, 0.25) 25%,
+      rgba(82, 82, 91, 0.45) 35%,
+      rgba(113, 113, 122, 0.65) 45%,
+      rgba(161, 161, 170, 0.85) 50%,
+      rgba(113, 113, 122, 0.65) 55%,
+      rgba(82, 82, 91, 0.45) 65%,
+      rgba(63, 63, 70, 0.25) 75%,
+      rgba(39, 39, 42, 0.1) 85%,
+      transparent 100%
+    );
+  }
+  50% {
+    background-position: 50% 50%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(63, 63, 70, 0.12) 15%,
+      rgba(82, 82, 91, 0.28) 25%,
+      rgba(113, 113, 122, 0.48) 35%,
+      rgba(161, 161, 170, 0.68) 45%,
+      rgba(244, 244, 245, 0.9) 50%,
+      rgba(161, 161, 170, 0.68) 55%,
+      rgba(113, 113, 122, 0.48) 65%,
+      rgba(82, 82, 91, 0.28) 75%,
+      rgba(63, 63, 70, 0.12) 85%,
+      transparent 100%
+    );
+  }
+  75% {
+    background-position: 75% 50%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(39, 39, 42, 0.1) 15%,
+      rgba(63, 63, 70, 0.25) 25%,
+      rgba(82, 82, 91, 0.45) 35%,
+      rgba(113, 113, 122, 0.65) 45%,
+      rgba(161, 161, 170, 0.85) 50%,
+      rgba(113, 113, 122, 0.65) 55%,
+      rgba(82, 82, 91, 0.45) 65%,
+      rgba(63, 63, 70, 0.25) 75%,
+      rgba(39, 39, 42, 0.1) 85%,
+      transparent 100%
+    );
+  }
+  100% {
+    background-position: 100% 50%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(24, 24, 27, 0.08) 15%,
+      rgba(24, 24, 27, 0.2) 25%,
+      rgba(39, 39, 42, 0.4) 35%,
+      rgba(63, 63, 70, 0.6) 45%,
+      rgba(82, 82, 91, 0.8) 50%,
+      rgba(63, 63, 70, 0.6) 55%,
+      rgba(39, 39, 42, 0.4) 65%,
+      rgba(24, 24, 27, 0.2) 75%,
+      rgba(24, 24, 27, 0.08) 85%,
+      transparent 100%
+    );
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-divider {
+    animation: none;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(63, 63, 70, 0.3) 25%,
+      rgba(82, 82, 91, 0.6) 50%,
+      rgba(63, 63, 70, 0.3) 75%,
+      transparent 100%
+    );
+    background-size: 100% 100%;
+  }
+}
