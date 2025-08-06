@@ -36,6 +36,13 @@ const HomePage: React.FC = () => {
       <section id="pricing" className="fade-in-sequential fade-in-pricing">
         <PricingStructure />
       </section>
+      <footer className="fade-in-sequential fade-in-footer py-8 text-center text-sm text-stone-400">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="footer-animated">
+            © 2025 neurix | made w luv in pdx, or
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

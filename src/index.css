@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -222,5 +224,97 @@
       transparent 100%
     );
     background-size: 100% 100%;
+  }
+}
+
+/* Animated Footer with Cycling Glyphs */
+.footer-animated {
+  font-family: 'IBM Plex Mono', monospace;
+  position: relative;
+  display: inline-block;
+  padding: 20px;
+}
+
+.footer-animated::before,
+.footer-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border: 1px solid transparent;
+  animation: glyphCycle 3s ease-in-out infinite;
+}
+
+.footer-animated::after {
+  animation-delay: 1.5s;
+}
+
+@keyframes glyphCycle {
+  0% {
+    border-image: linear-gradient(0deg, 
+      transparent 0%, 
+      rgba(168, 162, 158, 0.3) 25%, 
+      rgba(168, 162, 158, 0.6) 50%, 
+      rgba(168, 162, 158, 0.3) 75%, 
+      transparent 100%) 1;
+    filter: blur(0px);
+    opacity: 1;
+  }
+  25% {
+    border-image: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(168, 162, 158, 0.4) 25%, 
+      rgba(168, 162, 158, 0.8) 50%, 
+      rgba(168, 162, 158, 0.4) 75%, 
+      transparent 100%) 1;
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+  50% {
+    border-image: linear-gradient(180deg, 
+      transparent 0%, 
+      rgba(168, 162, 158, 0.5) 25%, 
+      rgba(168, 162, 158, 1) 50%, 
+      rgba(168, 162, 158, 0.5) 75%, 
+      transparent 100%) 1;
+    filter: blur(2px);
+    opacity: 0.6;
+  }
+  75% {
+    border-image: linear-gradient(270deg, 
+      transparent 0%, 
+      rgba(168, 162, 158, 0.4) 25%, 
+      rgba(168, 162, 158, 0.8) 50%, 
+      rgba(168, 162, 158, 0.4) 75%, 
+      transparent 100%) 1;
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+  100% {
+    border-image: linear-gradient(360deg, 
+      transparent 0%, 
+      rgba(168, 162, 158, 0.3) 25%, 
+      rgba(168, 162, 158, 0.6) 50%, 
+      rgba(168, 162, 158, 0.3) 75%, 
+      transparent 100%) 1;
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+.fade-in-footer {
+  animation-delay: 1.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-animated::before,
+  .footer-animated::after {
+    animation: none;
+    border: 1px solid rgba(168, 162, 158, 0.3);
+    filter: none;
+    opacity: 0.5;
   }
 }
