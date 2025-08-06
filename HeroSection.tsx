@@ -19,7 +19,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     return () => clearTimeout(timer);
   }, []);
   
-  const handleCTAClick = () => {
+  const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     // Smooth scroll to DataNoise section
     const dataNoiseSection = document.getElementById('data-noise');
     if (dataNoiseSection) {
@@ -30,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     }
     
     if (onCTAClick) {
-      onCTAClick();
+      onCTAClick(event);
     }
   };
   return (

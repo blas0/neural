@@ -6,10 +6,13 @@ import WeatherTimeToast from '../../WeatherTimeToast';
 import RoadmapJourney from '../../RoadmapJourney';
 import PricingStructure from '../../PricingStructure';
 
+interface HomePageProps {
+  onBookCall: (element: HTMLElement, tier?: 'tier-1' | 'tier-2' | 'tier-3') => void;
+}
 
-const HomePage: React.FC = () => {
-  const handleCTAClick = () => {
-    console.log('CTA clicked - implement your booking logic here');
+const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
+  const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onBookCall(event.currentTarget);
   };
 
   const handleLearnMore = () => {
@@ -34,13 +37,11 @@ const HomePage: React.FC = () => {
         <RoadmapJourney />
       </section>
       <section id="pricing" className="fade-in-sequential fade-in-pricing">
-        <PricingStructure />
+        <PricingStructure onBookCall={onBookCall} />
       </section>
       <footer className="fade-in-sequential fade-in-footer py-8 text-center text-sm text-stone-400">
         <div className="max-w-7xl mx-auto px-4">
           <div className="footer-animated">
-            <div className="left-border"></div>
-            <div className="right-border"></div>
             © 2025 neurix | made w luv in pdx, or
           </div>
         </div>

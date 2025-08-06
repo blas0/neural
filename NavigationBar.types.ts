@@ -3,7 +3,7 @@ export interface NavigationBarProps {
   onLogoClick?: () => void;
   onPricingClick?: () => void;
   onAboutClick?: () => void;
-  onCTAClick?: () => void;
+  onCTAClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onRoadmapClick?: () => void;
   logoText?: string;
   ctaText?: string;
@@ -22,6 +22,6 @@ export interface MobileMenuProps {
   onClose: () => void;
   onPricingClick?: () => void;
   onAboutClick?: () => void;
-  onCTAClick?: () => void;
+  onCTAClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onRoadmapClick?: () => void;
 }

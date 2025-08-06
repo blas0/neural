@@ -1,9 +1,11 @@
 import React from 'react';
 import NavigationBar from './NavigationBar';
 import HomePage from './src/pages/HomePage';
-
+import { BookingPopover } from './src/components/BookingPopover';
+import { useBookingPopover } from './src/hooks/useBookingPopover';
 
 function App() {
+  const { isOpen, triggerElement, defaultTier, openPopover, closePopover } = useBookingPopover();
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -41,6 +43,10 @@ function App() {
     scrollToSection('about');
   };
 
+  const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    openPopover(event.currentTarget);
+  };
+
   return (
     <div className="App bg-stone-50">
       <NavigationBar 
@@ -48,8 +54,17 @@ function App() {
         onRoadmapClick={handleRoadmapClick}
         onPricingClick={handlePricingClick}
         onAboutClick={handleAboutClick}
+        onCTAClick={handleCTAClick}
       />
-      <HomePage />
+      <HomePage onBookCall={openPopover} />
+      
+      {/* Global Booking Popover */}
+      <BookingPopover 
+        isOpen={isOpen}
+        onClose={closePopover}
+        triggerElement={triggerElement}
+        defaultTier={defaultTier}
+      />
     </div>
   );
 }

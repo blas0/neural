@@ -32,8 +32,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     onClose();
   };
 
-  const handleCTAClick = () => {
-    onCTAClick?.();
+  const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onCTAClick?.(event);
     onClose();
   };
 
@@ -177,8 +177,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
     onAboutClick?.();
   };
 
-  const handleCTAClick = () => {
-    onCTAClick?.();
+  const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onCTAClick?.(event);
   };
 
   const handleRoadmapClick = () => {

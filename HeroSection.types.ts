@@ -1,6 +1,6 @@
 export interface HeroSectionProps {
   className?: string;
-  onCTAClick?: () => void;
+  onCTAClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   customHeader?: string;
   customSubtitle?: string;
   customCTAText?: string;

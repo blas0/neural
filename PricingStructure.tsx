@@ -12,10 +12,12 @@ interface PricingTier {
 
 interface PricingStructureProps {
   className?: string;
+  onBookCall?: (element: HTMLElement, tier?: 'tier-1' | 'tier-2' | 'tier-3') => void;
 }
 
 const PricingStructure: React.FC<PricingStructureProps> = ({
-  className = ''
+  className = '',
+  onBookCall
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [visibleTiers, setVisibleTiers] = useState<boolean[]>([false, false, false]);
@@ -68,7 +70,14 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
       description: 'integrated systems',
       tagline: 'where strategy meets execution',
       features: [
-        'everything in tier I',
+        'custom landing page design',
+        'brand identity integration',
+        'mobile-responsive architecture',
+        'performance optimization',
+        'seo fundamentals',
+        'professional typography & spacing',
+        'brand color palette implementation',
+        'basic analytics setup',
         'lead generation optimization',
         'custom api integrations',
         'backend architecture design',
@@ -87,7 +96,22 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
       description: 'enterprise grade',
       tagline: 'for businesses that depend on digital excellence',
       features: [
-        'everything in previous tiers',
+        'custom landing page design',
+        'brand identity integration',
+        'mobile-responsive architecture',
+        'performance optimization',
+        'seo fundamentals',
+        'professional typography & spacing',
+        'brand color palette implementation',
+        'basic analytics setup',
+        'lead generation optimization',
+        'custom api integrations',
+        'backend architecture design',
+        'advanced analytics & tracking',
+        'conversion rate optimization',
+        'automated workflows',
+        'third-party service connections',
+        'database design & management',
         'custom software development',
         'advanced performance monitoring',
         'scalable infrastructure design',
@@ -283,8 +307,12 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
                           : 'bg-white text-zinc-800 border border-zinc-300 hover:bg-zinc-50 focus:ring-zinc-500'
                       }`}
                       style={{ fontFamily: 'IBM Plex Mono, monospace' }}
-                      onClick={() => {
-                        console.log(`Selected ${tier.name}`);
+                      onClick={(event) => {
+                        if (onBookCall) {
+                          onBookCall(event.currentTarget, tier.id as 'tier-1' | 'tier-2' | 'tier-3');
+                        } else {
+                          console.log(`Selected ${tier.name}`);
+                        }
                       }}
                     >
                       book a call
