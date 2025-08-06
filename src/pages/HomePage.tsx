@@ -39,6 +39,8 @@ const HomePage: React.FC = () => {
       <footer className="fade-in-sequential fade-in-footer py-8 text-center text-sm text-stone-400">
         <div className="max-w-7xl mx-auto px-4">
           <div className="footer-animated">
+            <div className="left-border"></div>
+            <div className="right-border"></div>
             © 2025 neurix | made w luv in pdx, or
           </div>
         </div>
