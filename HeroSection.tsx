@@ -30,7 +30,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     }
   };
   return (
-    <section className={`min-h-screen bg-stone-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 ${className}`}>
+    <section className={`min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] bg-stone-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 ${className}`}>
         <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ease-out ${
           isVisible 
             ? 'opacity-100 blur-none translate-y-0' 

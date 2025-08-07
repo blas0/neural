@@ -11,13 +11,11 @@ const emailLimitStore = new Map<string, { count: number; resetTime: number }>();
 const BookingFormSchema = z.object({
   firstName: z.string()
     .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name must be less than 50 characters')
-    .regex(/^[a-zA-Z\s'-]+$/, 'First name can only contain letters, spaces, hyphens, and apostrophes'),
+    .max(50, 'First name must be less than 50 characters'),
   
   lastName: z.string()
     .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name must be less than 50 characters')
-    .regex(/^[a-zA-Z\s'-]+$/, 'Last name can only contain letters, spaces, hyphens, and apostrophes'),
+    .max(50, 'Last name must be less than 50 characters'),
   
   email: z.string()
     .email('Please enter a valid email address')
@@ -26,8 +24,7 @@ const BookingFormSchema = z.object({
   
   phone: z.string()
     .min(10, 'Phone number must be at least 10 digits')
-    .max(20, 'Phone number must be less than 20 characters')
-    .regex(/^[\+]?[1-9]?[\d\s\(\)\-\.]+$/, 'Please enter a valid phone number'),
+    .max(20, 'Phone number must be less than 20 characters'),
   
   website: z.string()
     .url('Please enter a valid website URL')
@@ -45,7 +42,7 @@ const BookingFormSchema = z.object({
   honeypot: z.string().optional(),
   source: z.string().optional(),
   timestamp: z.string().optional()
-});
+});;
 
 // Security utilities
 const hashIP = (ip: string): string => {
@@ -125,7 +122,13 @@ const submitToAirtable = async (data: any) => {
   const baseId = process.env.AIRTABLE_BASE_ID || 'app8vyUe1sr8A2QlS';
   
   if (!apiKey) {
+    console.error('Airtable API key is missing from environment variables');
     throw new Error('Airtable API key missing');
+  }
+  
+  if (!baseId) {
+    console.error('Airtable base ID is missing');
+    throw new Error('Airtable base ID missing');
   }
 
   const base = new Airtable({ apiKey }).base(baseId);
@@ -144,40 +147,91 @@ const submitToAirtable = async (data: any) => {
       'Tier': data.tier
     };
 
+    // Add message field if a Message field exists in Airtable (optional)
+    if (data.message && data.message.trim()) {
+      // Note: Add this field to your Airtable table if you want to store messages
+      // fields['Message'] = data.message.trim();
+    }
+
     // Only add optional fields if they have values
     // Note: Since we couldn't find message/status/source fields in your table,
     // we'll only submit the core contact information fields that exist
 
+    console.log('Submitting to Airtable with fields:', JSON.stringify(fields, null, 2));
+    
     const record = await table.create([{ fields }]);
 
+    console.log('Airtable submission successful:', record[0].id);
     return { success: true, id: record[0].id };
   } catch (error) {
     console.error('Airtable submission failed:', error);
+    console.error('Failed with submitted data:', JSON.stringify(data, null, 2));
+    
+    // More specific error messages
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+      
+      if (error.message.includes('AUTHENTICATION_REQUIRED')) {
+        throw new Error('Airtable authentication failed - invalid API key');
+      }
+      if (error.message.includes('NOT_FOUND')) {
+        throw new Error('Airtable table or base not found');
+      }
+      if (error.message.includes('INVALID_REQUEST_UNKNOWN')) {
+        throw new Error('Airtable field validation failed - check field names and types');
+      }
+      if (error.message.includes('INVALID_REQUEST_MISSING_FIELDS')) {
+        throw new Error('Required fields missing in Airtable submission');
+      }
+      throw new Error(`Airtable error: ${error.message}`);
+    }
+    
     throw new Error('Failed to submit to Airtable');
   }
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Global error handler to ensure we always return JSON
+  const handleError = (error: any, statusCode = 500) => {
+    console.error('API handler error:', error);
+    try {
+      return res.status(statusCode).json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Something went wrong. Please try again later.'
+      });
+    } catch (jsonError) {
+      console.error('Failed to send JSON error response:', jsonError);
+      return res.status(500).send('Internal server error');
+    }
+  };
+
+  // Set JSON content type first
+  res.setHeader('Content-Type', 'application/json');
+  
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ 
-      success: false, 
-      error: 'Method not allowed',
-      message: 'Only POST requests are accepted'
-    });
-  }
-
   try {
+    // Handle preflight request
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+      return res.status(405).json({ 
+        success: false, 
+        error: 'Method not allowed',
+        message: 'Only POST requests are accepted'
+      });
+    }
     const clientIP = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || 
                      req.headers['x-real-ip'] as string || 
                      req.socket?.remoteAddress || 
@@ -192,6 +246,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
+    // Enhanced logging for debugging
+    console.log('Request body type:', typeof req.body);
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('Environment check - AIRTABLE_API_KEY exists:', !!process.env.AIRTABLE_API_KEY);
+    console.log('Environment check - AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID);
+    console.log('Client IP:', clientIP);
+    console.log('User Agent:', req.headers['user-agent']);
+    
+    // Validate request body exists
+    if (!req.body) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing request body',
+        message: 'Please provide form data'
+      });
+    }
+    
     // Validate request body
     const validatedData = BookingFormSchema.parse(req.body);
 
@@ -240,30 +311,46 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error('API error:', error);
 
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation failed',
-        message: 'Please check your form data and try again.',
-        details: error.issues.map((e: z.ZodIssue) => ({
-          field: e.path.join('.'),
-          message: e.message
-        }))
-      });
-    }
+    // Ensure we always return JSON, even for unexpected errors
+    try {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          error: 'Validation failed',
+          message: 'Please check your form data and try again.',
+          details: error.issues.map((e: z.ZodIssue) => ({
+            field: e.path.join('.'),
+            message: e.message
+          }))
+        });
+      }
 
-    if (error instanceof Error && error.message.includes('Airtable')) {
-      return res.status(503).json({
-        success: false,
-        error: 'Service temporarily unavailable',
-        message: 'We\'re experiencing technical difficulties. Please try again later or contact us directly.'
-      });
-    }
+      if (error instanceof Error && error.message.includes('Airtable')) {
+        return res.status(503).json({
+          success: false,
+          error: 'Service temporarily unavailable',
+          message: 'We\'re experiencing technical difficulties. Please try again later or contact us directly.'
+        });
+      }
 
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-      message: 'Something went wrong. Please try again later.'
-    });
+      // Handle missing environment variables
+      if (error instanceof Error && error.message.includes('API key missing')) {
+        return res.status(503).json({
+          success: false,
+          error: 'Service configuration error',
+          message: 'Service is temporarily unavailable. Please try again later or contact support.'
+        });
+      }
+
+      return res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Something went wrong. Please try again later.'
+      });
+    } catch (jsonError) {
+      // Fallback if JSON serialization fails
+      console.error('Failed to send JSON error response:', jsonError);
+      res.status(500).send('Internal server error');
+    }
   }
 }

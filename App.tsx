@@ -1,46 +1,42 @@
-import React from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import NavigationBar from './NavigationBar';
 import HomePage from './src/pages/HomePage';
-import { BookingPopover } from './src/components/BookingPopover';
 import { useBookingPopover } from './src/hooks/useBookingPopover';
+import { useNavigation } from './src/utils/scrollUtils';
+import { preloadOnInteraction } from './src/utils/preloadChunks';
+import { useKeyboardNavigation } from './src/hooks/useKeyboardNavigation';
+
+// Lazy load BookingPopover since it's not needed until user interaction
+const LazyBookingPopover = lazy(() => import('./src/components/BookingPopover/BookingPopover'));
 
 function App() {
   const { isOpen, triggerElement, defaultTier, openPopover, closePopover } = useBookingPopover();
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // Calculate navbar height based on screen size
-      const navbarHeight = window.innerWidth >= 640 ? 80 : 64; // sm:h-20 (80px) or h-16 (64px)
-      
-      // Get element position and calculate offset
-      const offsetTop = element.offsetTop - navbarHeight;
-      
-      // Ensure we don't scroll above the top of the page
-      const scrollTop = Math.max(0, offsetTop);
-      
-      window.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    } else {
-      console.warn(`Element with id "${sectionId}" not found`);
-    }
+  const { scrollToTop, scrollToAbout, scrollToRoadmap, scrollToPricing } = useNavigation();
+  const { announceToScreenReader } = useKeyboardNavigation();
+
+  // Initialize interaction-based preloading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      preloadOnInteraction();
+    }, 1000); // Small delay to ensure DOM is fully loaded
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleLogoClick = async () => {
+    await scrollToTop();
   };
 
-  const handleLogoClick = () => {
-    scrollToSection('top');
+  const handleRoadmapClick = async () => {
+    await scrollToRoadmap();
   };
 
-  const handleRoadmapClick = () => {
-    scrollToSection('roadmap');
+  const handlePricingClick = async () => {
+    await scrollToPricing();
   };
 
-  const handlePricingClick = () => {
-    scrollToSection('pricing');
-  };
-
-  const handleAboutClick = () => {
-    scrollToSection('about');
+  const handleAboutClick = async () => {
+    await scrollToAbout();
   };
 
   const handleCTAClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,22 +45,32 @@ function App() {
 
   return (
     <div className="App bg-stone-50">
-      <NavigationBar 
-        onLogoClick={handleLogoClick} 
-        onRoadmapClick={handleRoadmapClick}
-        onPricingClick={handlePricingClick}
-        onAboutClick={handleAboutClick}
-        onCTAClick={handleCTAClick}
-      />
-      <HomePage onBookCall={openPopover} />
+      {/* Main landmark for accessibility */}
+      <div id="navigation" role="navigation" aria-label="Main navigation" className="fade-in-sequential fade-in-nav">
+        <NavigationBar 
+          onLogoClick={handleLogoClick} 
+          onRoadmapClick={handleRoadmapClick}
+          onPricingClick={handlePricingClick}
+          onAboutClick={handleAboutClick}
+          onCTAClick={handleCTAClick}
+        />
+      </div>
       
-      {/* Global Booking Popover */}
-      <BookingPopover 
-        isOpen={isOpen}
-        onClose={closePopover}
-        triggerElement={triggerElement}
-        defaultTier={defaultTier}
-      />
+      <main id="main-content" role="main" aria-label="Main content">
+        <HomePage onBookCall={openPopover} />
+      </main>
+      
+      {/* Global Booking Popover - Only load when needed */}
+      {isOpen && (
+        <Suspense fallback={<div aria-live="polite">Loading booking form...</div>}>
+          <LazyBookingPopover 
+            isOpen={isOpen}
+            onClose={closePopover}
+            triggerElement={triggerElement}
+            defaultTier={defaultTier}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

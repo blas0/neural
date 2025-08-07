@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, memo } from 'react';
 import { HeatmapRect } from '@visx/heatmap';
 import { scaleLinear, scaleBand } from '@visx/scale';
 import { Group } from '@visx/group';
@@ -96,7 +96,7 @@ interface RoadmapJourneyProps {
   fullscreen?: boolean;
 }
 
-const RoadmapJourney: React.FC<RoadmapJourneyProps> = ({
+const RoadmapJourney: React.FC<RoadmapJourneyProps> = memo(({
   width = 900,
   height = 200,
   className = '',
@@ -297,6 +297,8 @@ const RoadmapJourney: React.FC<RoadmapJourneyProps> = ({
       </div>
     </div>
   );
-};
+});
+
+RoadmapJourney.displayName = 'RoadmapJourney';
 
 export default RoadmapJourney;

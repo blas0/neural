@@ -46,8 +46,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
         throw new Error('Submission flagged as potential spam');
       }
 
-      // Submit to API
-      const response = await fetch('/api/submit-booking', {
+      // Submit to API - adjust URL for development vs production
+      const apiUrl = process.env.NODE_ENV === 'development' 
+        ? '/api/submit-booking' 
+        : '/api/submit-booking';
+      
+      console.log('Submitting to:', apiUrl);
+      console.log('Form data:', { ...sanitizedData, source: window.location.pathname });
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,11 +67,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (jsonError) {
+          // If response isn't JSON, use status-based message
+          console.error('Failed to parse error response as JSON:', jsonError);
+        }
+        throw new Error(errorMessage);
       }
 
-      const result: FormSubmissionResponse = await response.json();
+      let result: FormSubmissionResponse;
+      try {
+        result = await response.json();
+      } catch (jsonError) {
+        console.error('Failed to parse success response as JSON:', jsonError);
+        throw new Error('Server response was not valid JSON. Please try again or contact support.');
+      }
       
       // Reset form on success
       reset();
@@ -281,9 +301,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
         {errors.message && (
           <p className="mt-1 text-xs text-red-600 font-mono">{errors.message.message}</p>
         )}
-        <p className="mt-1 text-xs text-zinc-500 font-mono">
-          Note: Core contact info will be saved to Airtable. Project details will be included in our initial discussion.
-        </p>
+
       </div>
 
       {/* Submit Button */}

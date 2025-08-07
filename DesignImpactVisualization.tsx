@@ -1,4 +1,6 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, memo } from 'react';
+
+// More specific imports to enable better tree shaking
 import { AreaStack } from '@visx/shape';
 import { scaleTime, scaleLinear } from '@visx/scale';
 import { Group } from '@visx/group';
@@ -104,7 +106,7 @@ interface DesignImpactVisualizationProps {
   className?: string;
 }
 
-const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = ({
+const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo(({
   width = 800,
   height = 500,
   className = ''
@@ -382,6 +384,8 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = ({
       </div>
     </div>
   );
-};
+});
+
+DesignImpactVisualization.displayName = 'DesignImpactVisualization';
 
 export default DesignImpactVisualization;

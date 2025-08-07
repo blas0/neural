@@ -49,6 +49,32 @@
   animation-delay: 1.3s;
 }
 
+.fade-in-footer {
+  animation-delay: 1.5s;
+}
+
+/* Mobile optimization - faster animations for thumb-first users */
+@media (max-width: 768px) {
+  .fade-in-sequential {
+    animation-duration: 0.6s;
+  }
+  
+  .fade-in-nav { animation-delay: 0.05s; }
+  .fade-in-toast { animation-delay: 0.2s; }
+  .fade-in-hero { animation-delay: 0.3s; }
+  .fade-in-noise { animation-delay: 0.5s; }
+  .fade-in-services { animation-delay: 0.7s; }
+  .fade-in-roadmap { animation-delay: 0.9s; }
+  .fade-in-pricing { animation-delay: 1.1s; }
+  .fade-in-footer { animation-delay: 1.3s; }
+}
+
+@media (max-width: 480px) {
+  .fade-in-sequential {
+    animation-duration: 0.4s;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fade-in-sequential {
     animation: none;
@@ -233,6 +259,31 @@
   position: relative;
   display: inline-block;
   padding: 25px 35px;
+}
+
+/* Enhanced styling for the personal footer message */
+.footer-animated span:last-child {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.95em;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+}
+
+/* Subtle hover effect for the personal message */
+.footer-animated:hover span:last-child {
+  color: rgb(214, 211, 209) !important;
+  transform: translateY(-1px);
+}
+
+/* Optional: Add a subtle pulse to the word "luv" for playful touch */
+@keyframes lovePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.footer-animated span:last-child {
+  animation: lovePulse 3s ease-in-out infinite;
+  animation-delay: 2s;
 }
 
 /* Top Border */

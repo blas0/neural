@@ -18,8 +18,12 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Performance optimizations */
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": ["src", "*.tsx", "*.ts"],
-  "exclude": ["node_modules", "dist", "vite.config.ts"]
+  "include": ["src", "api", "*.tsx", "*.ts"],
+  "exclude": ["node_modules", "dist", "vite.config.ts", ".tsbuildinfo"]
 }

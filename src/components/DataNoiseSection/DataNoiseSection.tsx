@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { DataNoiseSectionProps, Particle } from './DataNoiseSection.types';
 import { generateRandomParticle, updateParticleWavePosition, updateMatrixCycling, PARTICLE_CONFIG } from './DataNoiseSection.utils';
+import { scrollToAbout } from '../../utils/scrollUtils';
+import { SECTION_IDS } from '../../utils/constants';
 
-const DataNoiseSection: React.FC<DataNoiseSectionProps> = ({ className = '' }) => {
+const DataNoiseSection: React.FC<DataNoiseSectionProps> = memo(({ className = '' }) => {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isAnimating, setIsAnimating] = useState(true);
   
-  const handleSwimClick = () => {
-    // Smooth scroll to Overview of Services section
-    const overviewSection = document.getElementById('overview-services');
-    if (overviewSection) {
-      overviewSection.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+  const handleSwimClick = async () => {
+    // Use the robust scroll utility to navigate to About section (OverviewOfServices)
+    const scrollSuccess = await scrollToAbout();
+    if (!scrollSuccess) {
+      console.warn('Failed to scroll to About section. The section may not be loaded yet.');
     }
   };
   
@@ -71,7 +70,7 @@ const DataNoiseSection: React.FC<DataNoiseSectionProps> = ({ className = '' }) =
   
   return (
     <section 
-      id="data-noise"
+      id={SECTION_IDS.DATA_NOISE}
       className={`relative w-full min-h-screen bg-stone-50 overflow-hidden flex items-center justify-center py-16 md:py-24 ${className}`}
       aria-label="Data noise background section"
     >
@@ -142,6 +141,8 @@ const DataNoiseSection: React.FC<DataNoiseSectionProps> = ({ className = '' }) =
       )}
     </section>
   );
-};
+});
+
+DataNoiseSection.displayName = 'DataNoiseSection';
 
 export default DataNoiseSection;

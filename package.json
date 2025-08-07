@@ -3,15 +3,22 @@
   "version": "1.0.0",
   "description": "A professional React hero section component with Google Fonts and Tailwind CSS",
   "main": "HeroSection.tsx",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build:analyze": "tsc && vite build --mode analyze",
+    "build:fast": "vite build --mode development",
+    "preview": "vite preview",
+    "preview:dist": "vite preview --port 3000",
+    "clean": "rm -rf dist .tsbuildinfo node_modules/.vite",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.15",
     "@hookform/resolvers": "^5.2.1",
-    "@types/react-router-dom": "^5.3.3",
     "@vercel/node": "^5.3.11",
     "@visx/axis": "^3.12.0",
     "@visx/curve": "^3.12.0",
@@ -27,12 +34,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.62.0",
-    "react-router-dom": "^7.7.1",
     "zod": "^4.0.15"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",

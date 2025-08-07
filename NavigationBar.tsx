@@ -52,7 +52,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     >
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+        className={`absolute inset-0 bg-black/20 transition-all duration-300 ease-out ${
+          isOpen ? 'backdrop-blur-sm' : 'backdrop-blur-none'
+        }`}
         onClick={onClose}
       />
       
@@ -233,24 +235,30 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             <div className="hidden lg:flex items-center space-x-8">
               <button
                 onClick={handlePricingClick}
+                data-section="pricing"
                 className="text-lg font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+                aria-label="Navigate to pricing section"
               >
                 pricing
               </button>
               
               <button
                 onClick={handleAboutClick}
+                data-section="about"
                 className="text-lg font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+                aria-label="Navigate to about section"
               >
                 about
               </button>
               
               <button
                 onClick={handleRoadmapClick}
+                data-section="roadmap"
                 className="text-lg font-medium text-zinc-800 hover:text-zinc-600 transition-colors duration-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-stone-50 rounded-lg"
                 style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+                aria-label="Navigate to roadmap section"
               >
                 roadmap
               </button>

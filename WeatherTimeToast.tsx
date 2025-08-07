@@ -57,32 +57,36 @@ const WeatherTimeToast: React.FC<WeatherTimeToastProps> = ({ className = '' }) =
 
         // Try to get weather from OpenWeatherMap (free tier)
         // Note: In production, you'd want to store the API key securely
-        const API_KEY = 'demo'; // Replace with actual API key
+        // Skip API call if no valid key available - use fallback data
+        const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
         
-        try {
-          const weatherResponse = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=imperial`
-          );
-          
-          if (weatherResponse.ok) {
-            const weatherData = await weatherResponse.json();
-            setWeather({
-              temperature: Math.round(weatherData.main.temp),
-              condition: weatherData.weather[0].main.toLowerCase(),
-              location: 'Portland, OR'
-            });
-          } else {
-            throw new Error('Weather API failed');
+        if (API_KEY && API_KEY !== 'demo' && API_KEY !== 'your_api_key_here') {
+          try {
+            const weatherResponse = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=imperial`
+            );
+            
+            if (weatherResponse.ok) {
+              const weatherData = await weatherResponse.json();
+              setWeather({
+                temperature: Math.round(weatherData.main.temp),
+                condition: weatherData.weather[0].main.toLowerCase(),
+                location: 'Portland, OR'
+              });
+              setLoading(false);
+              return; // Exit early on success
+            }
+          } catch (apiError) {
+            console.log('Weather API unavailable, using fallback data');
           }
-        } catch (apiError) {
-          // Fallback to mock Portland weather
-          setWeather({
-            temperature: Math.floor(Math.random() * 20) + 60, // Random temp between 60-80°F (typical Portland range)
-            condition: ['clear', 'clouds', 'rain', 'drizzle'][Math.floor(Math.random() * 4)],
-            location: 'Portland, OR'
-          });
         }
         
+        // Fallback to mock Portland weather
+        setWeather({
+          temperature: Math.floor(Math.random() * 20) + 60, // Random temp between 60-80°F (typical Portland range)
+          condition: ['clear', 'clouds', 'rain', 'drizzle'][Math.floor(Math.random() * 4)],
+          location: 'Portland, OR'
+        });
         setLoading(false);
       } catch (error) {
         console.error('Error getting weather data:', error);

@@ -36,8 +36,8 @@ export const ALL_MATRIX_CHARS =
 
 export const PARTICLE_CONFIG: ParticleConfig = {
   count: {
-    mobile: 20,  // Increased for better wave effect
-    desktop: 35
+    mobile: 15,  // Reduced for better performance
+    desktop: 25  // Reduced from 35 for better performance
   },
   speed: {
     min: 0.3,
