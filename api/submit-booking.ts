@@ -121,8 +121,18 @@ const submitToAirtable = async (data: any) => {
   const apiKey = process.env.AIRTABLE_API_KEY;
   const baseId = process.env.AIRTABLE_BASE_ID || 'app8vyUe1sr8A2QlS';
   
+  // Enhanced environment debugging
+  console.log('=== AIRTABLE ENVIRONMENT CHECK ===');
+  console.log('API Key exists:', !!apiKey);
+  console.log('API Key length:', apiKey?.length || 0);
+  console.log('API Key first 10 chars:', apiKey?.substring(0, 10) || 'MISSING');
+  console.log('Base ID:', baseId);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('All env keys:', Object.keys(process.env).filter(k => k.includes('AIRTABLE')));
+  console.log('================================');
+  
   if (!apiKey) {
-    console.error('Airtable API key is missing from environment variables');
+    console.error('CRITICAL: Airtable API key is missing from environment variables');
     throw new Error('Airtable API key missing');
   }
   
@@ -147,10 +157,21 @@ const submitToAirtable = async (data: any) => {
       'Tier': data.tier
     };
 
+    // Enhanced field validation logging
+    console.log('=== FIELD MAPPING DEBUG ===');
+    console.log('Original form data:', JSON.stringify(data, null, 2));
+    console.log('Mapped fields for Airtable:', JSON.stringify(fields, null, 2));
+    console.log('Field types check:');
+    Object.entries(fields).forEach(([key, value]) => {
+      console.log(`  ${key}: ${typeof value} = "${value}"`);
+    });
+    console.log('==========================');
+
     // Add message field if a Message field exists in Airtable (optional)
     if (data.message && data.message.trim()) {
       // Note: Add this field to your Airtable table if you want to store messages
       // fields['Message'] = data.message.trim();
+      console.log('Message field skipped - not configured in Airtable table');
     }
 
     // Only add optional fields if they have values
