@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import Airtable from 'airtable';
 import { createHash } from 'crypto';
+
+// Use dynamic import for Airtable to ensure compatibility
+const getAirtable = async () => {
+  const { default: Airtable } = await import('airtable');
+  return Airtable;
+};
 
 // Rate limiting store (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -27,9 +32,10 @@ const BookingFormSchema = z.object({
     .max(20, 'Phone number must be less than 20 characters'),
   
   website: z.string()
-    .url('Please enter a valid website URL')
     .optional()
-    .or(z.literal('')),
+    .refine((val) => !val || val === '' || z.string().url().safeParse(val).success, {
+      message: 'Please enter a valid website URL'
+    }),
   
   tier: z.enum(['tier-1', 'tier-2', 'tier-3'], {
     message: 'Please select a valid tier'
@@ -42,7 +48,7 @@ const BookingFormSchema = z.object({
   honeypot: z.string().optional(),
   source: z.string().optional(),
   timestamp: z.string().optional()
-});;
+});
 
 // Security utilities
 const hashIP = (ip: string): string => {
@@ -141,6 +147,7 @@ const submitToAirtable = async (data: any) => {
     throw new Error('Airtable base ID missing');
   }
 
+  const Airtable = await getAirtable();
   const base = new Airtable({ apiKey }).base(baseId);
   
   // Using the table ID from your Airtable URL: tblGAQ6b4C2v7JfW8
