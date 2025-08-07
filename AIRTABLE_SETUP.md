@@ -22,16 +22,16 @@ Your Airtable table has been analyzed and the integration configured with these 
 | Phone | `Phone Number` | ✅ Active | Required phone number |
 | Website | `Website` | ✅ Active | Optional website URL |
 | Tier | `Tier` | ✅ Active | Project tier selection |
+| Project Details | `Project Details` | ✅ Active | Optional project description |
 
 ### 📝 Form Data Not Stored in Airtable:
 
-The form captures additional data but these fields weren't found in your table:
-- **Project Details/Message**: Captured in form but not stored in Airtable
+The form captures additional metadata that is not stored in Airtable:
 - **Source**: Traffic source tracking (not stored)  
 - **Status**: Lead status (not in your table structure)
 - **Metadata**: IP hash, user agent, timestamps (not stored)
 
-**Note:** The core contact information (name, email, phone, website, tier) will be saved to your Airtable. Additional project details will be available during your consultation call but won't be automatically stored in the database.
+**Note:** All form data including contact information (name, email, phone, website, tier) and project details are now saved to your Airtable. Only metadata like source tracking and IP information is not stored.
 
 ### Field Configuration Details:
 

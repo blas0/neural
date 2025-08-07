@@ -10,7 +10,7 @@ import { useKeyboardNavigation } from './src/hooks/useKeyboardNavigation';
 const LazyBookingPopover = lazy(() => import('./src/components/BookingPopover/BookingPopover'));
 
 function App() {
-  const { isOpen, triggerElement, defaultTier, openPopover, closePopover } = useBookingPopover();
+  const { isOpen, animationState, triggerElement, defaultTier, openPopover, closePopover } = useBookingPopover();
   const { scrollToTop, scrollToAbout, scrollToRoadmap, scrollToPricing } = useNavigation();
   const { announceToScreenReader } = useKeyboardNavigation();
 
@@ -61,10 +61,11 @@ function App() {
       </main>
       
       {/* Global Booking Popover - Only load when needed */}
-      {isOpen && (
+      {(isOpen || animationState === 'closing') && (
         <Suspense fallback={<div aria-live="polite">Loading booking form...</div>}>
           <LazyBookingPopover 
             isOpen={isOpen}
+            animationState={animationState}
             onClose={closePopover}
             triggerElement={triggerElement}
             defaultTier={defaultTier}

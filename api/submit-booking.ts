@@ -174,11 +174,10 @@ const submitToAirtable = async (data: any) => {
     });
     console.log('==========================');
 
-    // Add message field if a Message field exists in Airtable (optional)
+    // Add Project Details field (message from form)
     if (data.message && data.message.trim()) {
-      // Note: Add this field to your Airtable table if you want to store messages
-      // fields['Message'] = data.message.trim();
-      console.log('Message field skipped - not configured in Airtable table');
+      fields['Project Details'] = data.message.trim();
+      console.log('Project Details field added:', data.message.trim().substring(0, 100) + '...');
     }
 
     // Only add optional fields if they have values

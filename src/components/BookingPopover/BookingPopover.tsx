@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 // Removed floating-ui import as we're centering in viewport instead
 import { X, CheckCircle, AlertCircle } from 'lucide-react';
@@ -9,7 +9,8 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
   isOpen, 
   onClose, 
   triggerElement,
-  defaultTier 
+  defaultTier,
+  animationState = 'closed'
 }) => {
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState<string>('');
@@ -45,9 +46,22 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
     };
   }, [isOpen, onClose]);
 
+  // Synchronous DOM operations for better animation timing
+  useLayoutEffect(() => {
+    if (isOpen && animationState === 'opening') {
+      // Force reflow to ensure DOM is ready for animation
+      if (popoverRef.current) {
+        popoverRef.current.offsetHeight; // Trigger reflow
+      }
+      if (backdropRef.current) {
+        backdropRef.current.offsetHeight; // Trigger reflow
+      }
+    }
+  }, [isOpen, animationState]);
+
   // Focus management
   useEffect(() => {
-    if (isOpen && popoverRef.current) {
+    if (isOpen && popoverRef.current && animationState === 'open') {
       const firstFocusable = popoverRef.current.querySelector(
         'input, select, textarea, button'
       ) as HTMLElement;
@@ -56,7 +70,7 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
         firstFocusable.focus();
       }
     }
-  }, [isOpen, submissionStatus]);
+  }, [isOpen, submissionStatus, animationState]);
 
   const handleSuccess = (response: FormSubmissionResponse) => {
     setSubmissionStatus('success');
@@ -87,19 +101,48 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
     onClose();
   };
 
-  if (!isOpen) return null;
+  // Show popover during opening/closing animations as well as when fully open
+  if (!isOpen && animationState === 'closed') return null;
+
+  // Determine backdrop animation class
+  const getBackdropAnimationClass = () => {
+    switch (animationState) {
+      case 'opening':
+        return 'popover-backdrop-enter';
+      case 'closing':
+        return 'popover-backdrop-exit';
+      case 'open':
+        return '';
+      default:
+        return '';
+    }
+  };
+
+  // Determine content animation class
+  const getContentAnimationClass = () => {
+    switch (animationState) {
+      case 'opening':
+        return 'popover-content-enter';
+      case 'closing':
+        return 'popover-content-exit';
+      case 'open':
+        return '';
+      default:
+        return '';
+    }
+  };
 
   const popoverContent = (
     <div 
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm ${getBackdropAnimationClass()}`}
     >
       <div
         className="relative w-full max-w-md mx-auto"
       >
         <div
           ref={popoverRef}
-          className="bg-white rounded-xl shadow-2xl border border-zinc-200 p-6 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200"
+          className={`bg-white rounded-xl shadow-2xl border border-zinc-200 p-6 max-h-[90vh] overflow-y-auto ${getContentAnimationClass()}`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="booking-popover-title"
