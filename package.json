@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A professional React hero section component with Google Fonts and Tailwind CSS",
   "main": "HeroSection.tsx",
+  "type": "module",
   "engines": {
     "node": "22.x"
   },
