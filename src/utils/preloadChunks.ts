@@ -80,12 +80,12 @@ export const preloadChunk = (chunkName: string, options: PreloadOptions = {}) =>
           );
           break;
         case 'roadmap':
-          import('../../RoadmapJourney').then(() => 
+          import('../components/RoadmapJourney').then(() => 
             console.log('Preloaded: RoadmapJourney')
           );
           break;
         case 'pricing':
-          import('../../PricingStructure').then(() => 
+          import('../components/PricingStructure').then(() => 
             console.log('Preloaded: PricingStructure')
           );
           break;

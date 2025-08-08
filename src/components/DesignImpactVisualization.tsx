@@ -6,6 +6,7 @@ import { scaleTime, scaleLinear } from '@visx/scale';
 import { Group } from '@visx/group';
 import { LinearGradient } from '@visx/gradient';
 import { curveBasis } from '@visx/curve';
+import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
 
 // Research-based data for design impact visualization
 // Time periods in seconds for various user impressions and decision points
@@ -107,12 +108,18 @@ interface DesignImpactVisualizationProps {
 }
 
 const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo(({
-  width = 800,
-  height = 500,
+  width: propWidth,
+  height: propHeight,
   className = ''
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [animationProgress, setAnimationProgress] = useState(0);
+  
+  // Use responsive dimensions with fallback to props
+  const { width, height, isMobile, isTablet } = useResponsiveDimensions(
+    propWidth || 800, 
+    propHeight || 500
+  );
 
   // Animation effect
   useEffect(() => {
@@ -122,21 +129,34 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
 
   useEffect(() => {
     if (isVisible) {
+      // Reduce animation complexity on mobile for better performance
+      const incrementStep = isMobile ? 0.05 : 0.02;
+      const intervalTime = isMobile ? 100 : 50;
+      
       const interval = setInterval(() => {
         setAnimationProgress(prev => {
           if (prev >= 1) {
             clearInterval(interval);
             return 1;
           }
-          return prev + 0.02;
+          return prev + incrementStep;
         });
-      }, 50);
+      }, intervalTime);
       return () => clearInterval(interval);
     }
-  }, [isVisible]);
+  }, [isVisible, isMobile]);
 
-  // Dimensions and margins
-  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  // Responsive dimensions and margins
+  const margin = useMemo(() => {
+    if (isMobile) {
+      return { top: 30, right: 20, bottom: 50, left: 40 };
+    } else if (isTablet) {
+      return { top: 35, right: 30, bottom: 55, left: 50 };
+    } else {
+      return { top: 40, right: 40, bottom: 60, left: 60 };
+    }
+  }, [isMobile, isTablet]);
+  
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -188,10 +208,10 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
       </div>
 
       {/* Visualization Container */}
-      <div className="flex justify-center items-start">
-        <div className="flex items-start space-x-8">
+      <div className="flex justify-center items-start overflow-x-auto px-4 sm:px-6 lg:px-0">
+        <div className="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-6 lg:space-y-0 min-w-max max-w-full">
           {/* Main Chart */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 w-full lg:w-auto">
             <svg width={width} height={height}>
               {/* Define gradients */}
               <defs>
@@ -254,8 +274,8 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                   strokeWidth={1}
                 />
 
-                {/* X-axis labels */}
-                {[0, 1, 2, 3, 5, 10, 30].map((time) => (
+                {/* X-axis labels - Simplified for mobile */}
+                {(isMobile ? [0, 2, 5, 30] : [0, 1, 2, 3, 5, 10, 30]).map((time) => (
                   <g key={time}>
                     <line
                       x1={xScale(time)}
@@ -269,7 +289,7 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                       x={xScale(time)}
                       y={innerHeight + 20}
                       textAnchor="middle"
-                      fontSize={12}
+                      fontSize={isMobile ? 10 : 12}
                       fill="#6B7280"
                       style={{ fontFamily: 'IBM Plex Mono, monospace' }}
                     >
@@ -278,8 +298,8 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                   </g>
                 ))}
 
-                {/* Y-axis labels */}
-                {[0, 25, 50, 75, 100].map((value) => (
+                {/* Y-axis labels - Simplified for mobile */}
+                {(isMobile ? [0, 50, 100] : [0, 25, 50, 75, 100]).map((value) => (
                   <g key={value}>
                     <line
                       x1={-5}
@@ -294,7 +314,7 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                       y={yScale(value)}
                       textAnchor="end"
                       dy="0.35em"
-                      fontSize={12}
+                      fontSize={isMobile ? 10 : 12}
                       fill="#6B7280"
                       style={{ fontFamily: 'IBM Plex Mono, monospace' }}
                     >
@@ -303,37 +323,41 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                   </g>
                 ))}
 
-                {/* Axis titles */}
-                <text
-                  x={innerWidth / 2}
-                  y={innerHeight + 45}
-                  textAnchor="middle"
-                  fontSize={14}
-                  fill="#374151"
-                  style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600 }}
-                >
-                  time (seconds)
-                </text>
+                {/* Axis titles - Hide on mobile to save space */}
+                {!isMobile && (
+                  <>
+                    <text
+                      x={innerWidth / 2}
+                      y={innerHeight + 45}
+                      textAnchor="middle"
+                      fontSize={14}
+                      fill="#374151"
+                      style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600 }}
+                    >
+                      time (seconds)
+                    </text>
 
-                <text
-                  x={-45}
-                  y={innerHeight / 2}
-                  textAnchor="middle"
-                  fontSize={14}
-                  fill="#374151"
-                  style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600 }}
-                  transform={`rotate(-90, -45, ${innerHeight / 2})`}
-                >
-                  impact percentage
-                </text>
+                    <text
+                      x={-45}
+                      y={innerHeight / 2}
+                      textAnchor="middle"
+                      fontSize={14}
+                      fill="#374151"
+                      style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600 }}
+                      transform={`rotate(-90, -45, ${innerHeight / 2})`}
+                    >
+                      impact percentage
+                    </text>
+                  </>
+                )}
               </Group>
             </svg>
           </div>
 
-          {/* Right Side Legend */}
-          <div className="flex flex-col pt-8">
+          {/* Responsive Legend */}
+          <div className="flex flex-col lg:pt-8 w-full lg:w-auto lg:min-w-max overflow-x-auto lg:overflow-visible">
             {/* Legend */}
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-3 lg:space-y-3 lg:gap-0 px-2 lg:px-0 min-w-max lg:min-w-0">
               {keys.map((key) => {
                 const labels: Record<DataKey, string> = {
                   firstImpressions: 'first impressions',
@@ -344,15 +368,15 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                 };
 
                 return (
-                  <div key={key} className="flex items-center space-x-3">
+                  <div key={key} className="flex items-center space-x-2 lg:space-x-3 min-w-0 whitespace-nowrap lg:whitespace-normal">
                     <div
-                      className="w-4 h-4 rounded flex-shrink-0"
+                      className="w-3 h-3 lg:w-4 lg:h-4 rounded flex-shrink-0"
                       style={{
                         background: `linear-gradient(45deg, ${colors[key as DataKey].start}, ${colors[key as DataKey].end})`
                       }}
                     />
                     <span
-                      className="text-sm text-zinc-700"
+                      className="text-xs lg:text-sm text-zinc-700 truncate"
                       style={{ fontFamily: 'IBM Plex Mono, monospace' }}
                     >
                       {labels[key as DataKey]}
@@ -365,21 +389,39 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
         </div>
       </div>
 
-      {/* Key insights below visualization */}
+      {/* Key insights below visualization - Simplified for mobile */}
       <div className="mt-12 text-center">
         <div 
           className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-xs text-zinc-600"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
-          <div>
-            <strong className="text-zinc-800">0.05s:</strong> 94% of first impressions are design-related
-          </div>
-          <div>
-            <strong className="text-zinc-800">3s:</strong> 40% of users leave if page takes longer to load
-          </div>
-          <div>
-            <strong className="text-zinc-800">100ms:</strong> delay can reduce conversions by 7%
-          </div>
+          {isMobile ? (
+            // Show most critical insights on mobile including conversion impact
+            <>
+              <div>
+                <strong className="text-zinc-800">0.05s:</strong> 94% of first impressions are design-related
+              </div>
+              <div>
+                <strong className="text-zinc-800">100ms:</strong> delay can reduce conversions by 7%
+              </div>
+              <div>
+                <strong className="text-zinc-800">3s:</strong> 40% of users leave if slow
+              </div>
+            </>
+          ) : (
+            // Show all insights on larger screens
+            <>
+              <div>
+                <strong className="text-zinc-800">0.05s:</strong> 94% of first impressions are design-related
+              </div>
+              <div>
+                <strong className="text-zinc-800">3s:</strong> 40% of users leave if page takes longer to load
+              </div>
+              <div>
+                <strong className="text-zinc-800">100ms:</strong> delay can reduce conversions by 7%
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

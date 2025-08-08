@@ -7,33 +7,31 @@ export default defineConfig({
     postcss: './postcss.config.js',
   },
   build: {
-    // Increase chunk size warning limit to 750kb (current bundle is 561kb)
-    chunkSizeWarningLimit: 750,
+    // Reduce chunk size warning for better mobile performance
+    chunkSizeWarningLimit: 500,
     
     // Enable source maps for better debugging in production
     sourcemap: false, // Set to true for staging/debug builds
     
-    // Optimize build output
+    // Optimize build output for mobile
     minify: 'esbuild',
     target: 'es2020',
+    
+    // Optimize for mobile loading
+    cssMinify: 'esbuild',
+    cssCodeSplit: true,
     
     rollupOptions: {
       output: {
         // Manual chunk splitting for better caching
         manualChunks: {
-          // Vendor chunks for better caching
+          // Vendor chunks for better caching and mobile performance
           'react-vendor': ['react', 'react-dom'],
           'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'ui-vendor': ['lucide-react', '@floating-ui/react'],
-          'visx-vendor': [
-            '@visx/axis',
-            '@visx/curve', 
-            '@visx/gradient',
-            '@visx/group',
-            '@visx/heatmap',
-            '@visx/scale',
-            '@visx/shape'
-          ],
+          'ui-vendor': ['lucide-react'],
+          'floating-ui': ['@floating-ui/react'],
+          'visx-core': ['@visx/axis', '@visx/curve', '@visx/gradient', '@visx/group'],
+          'visx-heavy': ['@visx/heatmap', '@visx/scale', '@visx/shape'],
         },
         
         // Optimize chunk file names for better caching
@@ -59,8 +57,19 @@ export default defineConfig({
   
   // Server configuration for development
   server: {
+    port: 5173,
+    host: 'localhost',
+    open: true, // Auto open browser
     hmr: {
-      overlay: false
+      overlay: true, // Show error overlay for better debugging
+      port: 24678, // Custom HMR port to avoid conflicts
+    },
+    // Force clear cache headers in development
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
     },
     proxy: {
       '/api': {

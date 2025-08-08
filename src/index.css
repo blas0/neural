@@ -488,3 +488,203 @@
     transform: none;
   }
 }
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Reduce transform complexity on mobile */
+  .hover\:scale-105:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Simplify shadows on mobile for better performance */
+  .shadow-2xl {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Optimize backdrop blur for mobile */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+}
+
+/* Battery-saving animations on very small screens */
+@media (max-width: 480px), (max-height: 600px) {
+  /* Disable complex animations on small screens */
+  .animate-pulse {
+    animation: none;
+    opacity: 0.75;
+  }
+  
+  /* Reduce TV static intensity */
+  .animate-tv-static-1,
+  .animate-tv-static-2,
+  .animate-tv-static-3 {
+    animation-duration: 0.3s !important;
+  }
+  
+  /* Simplify gradient animations */
+  .gradient-divider {
+    animation-duration: 6s !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  .hover\:shadow-lg:hover {
+    box-shadow: inherit;
+  }
+  
+  /* Focus on tap feedback instead */
+  .active\:scale-95:active {
+    transform: scale(0.98);
+  }
+}
+
+/* High DPI screen optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Use transform instead of box-shadow for better performance on retina */
+  .shadow-lg {
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Chart and visualization mobile fixes */
+@media (max-width: 768px) {
+  /* Ensure all charts are contained within viewport */
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Fix ViSX chart overflow issues */
+  [class*="visx"] {
+    max-width: 100vw !important;
+    overflow: visible !important;
+  }
+  
+  /* Responsive chart legends */
+  .chart-legend {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* Emergency mobile containment for charts */
+@media (max-width: 480px) {
+  /* Force all SVG elements to respect viewport */
+  svg {
+    max-width: 95vw !important;
+  }
+  
+  /* Reduce chart complexity on very small screens */
+  .chart-complex-elements {
+    display: none !important;
+  }
+  
+  /* Hide chart grid lines on mobile for cleaner look */
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  /* Simplify gradients on mobile for better performance */
+  [id*="gradient-"] {
+    opacity: 0.7 !important;
+  }
+}
+
+/* Mobile Navigation Touch Target Utilities */
+.min-h-touch {
+  min-height: 44px;
+}
+
+.min-w-touch {
+  min-width: 44px;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Navbar-specific mobile optimizations */
+@media (max-width: 1023px) {
+  .navbar-mobile-optimized nav {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+  
+  /* Prevent mobile menu from creating horizontal scrollbars */
+  .mobile-menu-panel {
+    max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
+    right: env(safe-area-inset-right, 0);
+  }
+  
+  /* Optimize mobile scrolling performance */
+  .mobile-scroll-optimized {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Safe Area Utilities for Mobile Devices */
+.pt-safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pb-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pl-safe-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.pr-safe-right {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Hide scrollbars while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent horizontal scrolling issues */
+.prevent-horizontal-scroll {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Layout stability for animations */
+.layout-stable {
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Mobile navigation optimizations */
+@media (max-width: 1023px) {
+  /* Reduce animation complexity on smaller screens */
+  .navbar-mobile-optimized {
+    transition: opacity 150ms ease-out;
+  }
+  
+  /* Prevent zoom on mobile inputs */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}

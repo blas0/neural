@@ -141,9 +141,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
       />
 
       {/* Name Fields Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
         <div>
-          <label htmlFor="firstName" className="block text-sm font-medium text-zinc-700 mb-2">
+          <label htmlFor="firstName" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
             First Name *
           </label>
           <input
@@ -151,7 +151,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             type="text"
             id="firstName"
             autoComplete="given-name"
-            className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+            className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
               errors.firstName 
                 ? 'border-red-300 bg-red-50' 
                 : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -159,12 +159,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             placeholder="John"
           />
           {errors.firstName && (
-            <p className="mt-1 text-xs text-red-600 font-mono">{errors.firstName.message}</p>
+            <p className="mt-2 text-fluid-xs lg:text-xs text-red-600 font-mono">{errors.firstName.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="lastName" className="block text-sm font-medium text-zinc-700 mb-2">
+          <label htmlFor="lastName" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
             Last Name *
           </label>
           <input
@@ -172,7 +172,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             type="text"
             id="lastName"
             autoComplete="family-name"
-            className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+            className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
               errors.lastName 
                 ? 'border-red-300 bg-red-50' 
                 : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -180,15 +180,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             placeholder="Doe"
           />
           {errors.lastName && (
-            <p className="mt-1 text-xs text-red-600 font-mono">{errors.lastName.message}</p>
+            <p className="mt-2 text-fluid-xs lg:text-xs text-red-600 font-mono">{errors.lastName.message}</p>
           )}
         </div>
       </div>
 
       {/* Contact Fields Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-zinc-700 mb-2">
+          <label htmlFor="email" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
             Email Address *
           </label>
           <input
@@ -196,7 +196,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             type="email"
             id="email"
             autoComplete="email"
-            className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+            inputMode="email"
+            className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
               errors.email 
                 ? 'border-red-300 bg-red-50' 
                 : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -204,12 +205,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             placeholder="john@example.com"
           />
           {errors.email && (
-            <p className="mt-1 text-xs text-red-600 font-mono">{errors.email.message}</p>
+            <p className="mt-2 text-fluid-xs lg:text-xs text-red-600 font-mono">{errors.email.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-zinc-700 mb-2">
+          <label htmlFor="phone" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
             Phone Number *
           </label>
           <input
@@ -217,7 +218,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             type="tel"
             id="phone"
             autoComplete="tel"
-            className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+            inputMode="tel"
+            className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
               errors.phone 
                 ? 'border-red-300 bg-red-50' 
                 : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -225,14 +227,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
             placeholder="(555) 123-4567"
           />
           {errors.phone && (
-            <p className="mt-1 text-xs text-red-600 font-mono">{errors.phone.message}</p>
+            <p className="mt-2 text-fluid-xs lg:text-xs text-red-600 font-mono">{errors.phone.message}</p>
           )}
         </div>
       </div>
 
       {/* Website Field */}
       <div>
-        <label htmlFor="website" className="block text-sm font-medium text-zinc-700 mb-2">
+        <label htmlFor="website" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
           Website <span className="text-zinc-500">(optional)</span>
         </label>
         <input
@@ -240,7 +242,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
           type="url"
           id="website"
           autoComplete="url"
-          className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+          inputMode="url"
+          className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
             errors.website 
               ? 'border-red-300 bg-red-50' 
               : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -248,19 +251,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
           placeholder="https://example.com"
         />
         {errors.website && (
-          <p className="mt-1 text-xs text-red-600 font-mono">{errors.website.message}</p>
+          <p className="mt-2 text-fluid-xs lg:text-xs text-red-600 font-mono">{errors.website.message}</p>
         )}
       </div>
 
       {/* Tier Selection */}
       <div>
-        <label htmlFor="tier" className="block text-sm font-medium text-zinc-700 mb-2">
+        <label htmlFor="tier" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
           Project Tier *
         </label>
         <select
           {...register('tier')}
           id="tier"
-          className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+          className={`w-full px-4 py-3 lg:px-3 lg:py-2 min-h-touch lg:min-h-0 border rounded-lg font-mono text-input-fluid transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
             errors.tier 
               ? 'border-red-300 bg-red-50' 
               : 'border-zinc-300 bg-white hover:border-zinc-400'
@@ -273,7 +276,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
           ))}
         </select>
         {selectedTierData && (
-          <p className="mt-1 text-xs text-zinc-600 font-mono">
+          <p className="mt-2 text-fluid-xs lg:text-xs text-zinc-600 font-mono">
             {selectedTierData.description}
           </p>
         )}
@@ -284,14 +287,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ defaultTier, onSuccess, onErr
 
       {/* Message Field */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-zinc-700 mb-2">
+        <label htmlFor="message" className="block text-fluid-sm lg:text-sm font-medium text-zinc-700 mb-2 font-mono">
           Project Details <span className="text-zinc-500">(optional)</span>
         </label>
         <textarea
           {...register('message')}
           id="message"
           rows={4}
-          className={`w-full px-3 py-2 border rounded-lg font-mono text-sm transition-colors resize-none focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent ${
+          className={`w-full px-4 py-3 lg:px-3 lg:py-2 border rounded-lg font-mono text-input-fluid transition-colors resize-none focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:border-transparent touch-manipulation ${
             errors.message 
               ? 'border-red-300 bg-red-50' 
               : 'border-zinc-300 bg-white hover:border-zinc-400'

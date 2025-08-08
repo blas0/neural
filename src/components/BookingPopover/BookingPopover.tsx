@@ -135,50 +135,53 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
   const popoverContent = (
     <div 
       ref={backdropRef}
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm ${getBackdropAnimationClass()}`}
+      className={`fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm ${getBackdropAnimationClass()} 
+        /* Mobile: full screen */ lg:flex lg:items-center lg:justify-center lg:p-4`}
     >
       <div
-        className="relative w-full max-w-md mx-auto"
+        className="relative w-full h-full lg:h-auto lg:max-w-md lg:mx-auto"
       >
         <div
           ref={popoverRef}
-          className={`bg-white rounded-xl shadow-2xl border border-zinc-200 p-6 max-h-[90vh] overflow-y-auto ${getContentAnimationClass()}`}
+          className={`bg-white h-full lg:h-auto lg:rounded-xl shadow-2xl border-0 lg:border lg:border-zinc-200 
+            overflow-y-auto pt-safe-top pb-safe-bottom px-4 py-6 lg:p-6 lg:max-h-[90vh] ${getContentAnimationClass()}`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="booking-popover-title"
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 sticky top-0 bg-white py-4 -mx-4 px-4 border-b border-zinc-100 lg:static lg:py-0 lg:mx-0 lg:px-0 lg:border-b-0">
             <h2 
               id="booking-popover-title"
-              className="text-xl font-medium text-zinc-900 font-mono"
+              className="text-fluid-lg lg:text-xl font-medium text-zinc-900 font-mono"
             >
               book consultation
             </h2>
             <button
               onClick={handleClose}
-              className="p-1 text-zinc-400 hover:text-zinc-600 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-zinc-600"
+              className="p-3 lg:p-1 min-h-touch lg:min-h-0 min-w-touch lg:min-w-0 text-zinc-400 hover:text-zinc-600 active:text-zinc-800 transition-colors rounded-lg lg:rounded focus:outline-none focus:ring-2 focus:ring-zinc-600 touch-manipulation"
               aria-label="Close booking form"
+              data-close-popover
             >
-              <X size={20} />
+              <X size={24} className="lg:w-5 lg:h-5" />
             </button>
           </div>
 
           {/* Success State */}
           {submissionStatus === 'success' && (
-            <div className="text-center py-8">
-              <CheckCircle className="mx-auto h-16 w-16 text-green-600 mb-4" />
-              <h3 className="text-lg font-medium text-green-900 mb-2 font-mono">
+            <div className="text-center py-8 lg:py-8">
+              <CheckCircle className="mx-auto h-16 w-16 lg:h-16 lg:w-16 text-green-600 mb-4" />
+              <h3 className="text-fluid-lg lg:text-lg font-medium text-green-900 mb-2 font-mono">
                 submission successful!
               </h3>
-              <p className="text-sm text-green-700 font-mono">
+              <p className="text-fluid-sm lg:text-sm text-green-700 font-mono px-2">
                 {statusMessage}
               </p>
               <div className="mt-4">
                 <div className="w-full bg-green-200 rounded-full h-1">
                   <div className="bg-green-600 h-1 rounded-full animate-pulse" style={{ width: '100%' }}></div>
                 </div>
-                <p className="text-xs text-green-600 mt-2 font-mono">closing automatically...</p>
+                <p className="text-fluid-xs lg:text-xs text-green-600 mt-2 font-mono">closing automatically...</p>
               </div>
             </div>
           )}
@@ -186,9 +189,9 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
           {/* Error State */}
           {submissionStatus === 'error' && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <div className="flex items-center">
-                <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
-                <p className="text-sm text-red-700 font-mono">
+              <div className="flex items-start">
+                <AlertCircle className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
+                <p className="text-fluid-sm lg:text-sm text-red-700 font-mono">
                   {statusMessage}
                 </p>
               </div>
@@ -199,7 +202,7 @@ const BookingPopover: React.FC<BookingPopoverProps> = ({
           {submissionStatus !== 'success' && (
             <>
               <div className="mb-6">
-                <p className="text-sm text-zinc-600 font-mono">
+                <p className="text-fluid-sm lg:text-sm text-zinc-600 font-mono leading-relaxed">
                   Ready to get started? Fill out the form below and we'll schedule a consultation to discuss your project.
                 </p>
               </div>

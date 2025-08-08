@@ -1,10 +1,11 @@
 {
   "build": {
     "env": {
-      "NODE_OPTIONS": "--max-old-space-size=4096"
+      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "VITE_BUILD_CACHE_BUST": "$VERCEL_GIT_COMMIT_SHA"
     }
   },
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run clean && npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
 
@@ -15,6 +16,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(js|css|html)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
         }
       ]
     },
@@ -32,6 +42,10 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }

@@ -44,9 +44,9 @@ function App() {
   };
 
   return (
-    <div className="App bg-stone-50">
+    <div className="App bg-stone-50 prevent-horizontal-scroll layout-stable">
       {/* Main landmark for accessibility */}
-      <div id="navigation" role="navigation" aria-label="Main navigation" className="fade-in-sequential fade-in-nav">
+      <div id="navigation" role="navigation" aria-label="Main navigation" className="fade-in-sequential fade-in-nav layout-stable">
         <NavigationBar 
           onLogoClick={handleLogoClick} 
           onRoadmapClick={handleRoadmapClick}
@@ -56,7 +56,7 @@ function App() {
         />
       </div>
       
-      <main id="main-content" role="main" aria-label="Main content">
+      <main id="main-content" role="main" aria-label="Main content" className="prevent-horizontal-scroll layout-stable">
         <HomePage onBookCall={openPopover} />
       </main>
       

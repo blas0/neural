@@ -8,8 +8,8 @@ import { SECTION_IDS } from '../utils/constants';
 
 // Lazy load heavy components that aren't immediately visible
 const OverviewOfServices = lazy(() => import('../../OverviewOfServices'));
-const RoadmapJourney = lazy(() => import('../../RoadmapJourney'));
-const PricingStructure = lazy(() => import('../../PricingStructure'));
+const RoadmapJourney = lazy(() => import('../components/RoadmapJourney'));
+const PricingStructure = lazy(() => import('../components/PricingStructure'));
 
 interface HomePageProps {
   onBookCall: (element: HTMLElement, tier?: 'tier-1' | 'tier-2' | 'tier-3') => void;
@@ -30,15 +30,15 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
   };
 
   return (
-    <div>
+    <div className="w-full prevent-horizontal-scroll layout-stable">
 
-      <section id={SECTION_IDS.TOP} className="fade-in-sequential fade-in-hero">
+      <section id={SECTION_IDS.TOP} className="fade-in-sequential fade-in-hero w-full prevent-horizontal-scroll">
         <HeroSection onCTAClick={handleCTAClick} />
       </section>
-      <div className="fade-in-sequential fade-in-noise">
+      <div className="w-full prevent-horizontal-scroll">
         <DataNoiseSection />
       </div>
-      <section id={SECTION_IDS.ABOUT} className="fade-in-sequential fade-in-services">
+      <section id={SECTION_IDS.ABOUT} className="w-full prevent-horizontal-scroll">
         <LazySection 
           height="min-h-[600px]"
           priority={true}
@@ -48,7 +48,7 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
         </LazySection>
       </section>
       
-      <section id={SECTION_IDS.ROADMAP} className="fade-in-sequential fade-in-roadmap">
+      <section id={SECTION_IDS.ROADMAP} className="w-full prevent-horizontal-scroll">
         <LazySection 
           height="min-h-[400px]"
           loadingVariant="minimal"
@@ -57,7 +57,7 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
         </LazySection>
       </section>
       
-      <section id={SECTION_IDS.PRICING} className="fade-in-sequential fade-in-pricing">
+      <section id={SECTION_IDS.PRICING} className="w-full prevent-horizontal-scroll">
         <LazySection 
           height="min-h-[800px]"
           loadingVariant="skeleton"
@@ -65,9 +65,9 @@ const HomePage: React.FC<HomePageProps> = ({ onBookCall }) => {
           <PricingStructure onBookCall={onBookCall} />
         </LazySection>
       </section>
-      <footer className="fade-in-sequential fade-in-footer py-8 text-sm text-stone-400">
+      <footer className="py-8 text-sm text-stone-400 w-full prevent-horizontal-scroll">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="footer-weather">
               <WeatherTimeToast />
             </div>

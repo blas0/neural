@@ -9,12 +9,15 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:fresh": "npm run clean && vite",
+    "dev:clear": "vite --force",
     "build": "tsc && vite build",
     "build:analyze": "tsc && vite build --mode analyze",
     "build:fast": "vite build --mode development",
     "preview": "vite preview",
     "preview:dist": "vite preview --port 3000",
     "clean": "rm -rf dist .tsbuildinfo node_modules/.vite",
+    "clean:all": "rm -rf dist .tsbuildinfo node_modules/.vite && npm cache clean --force",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -38,6 +41,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.0.0",
