@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, memo } from 'react';
+import React, { useMemo, memo } from 'react';
 
 // More specific imports to enable better tree shaking
 import { AreaStack } from '@visx/shape';
@@ -112,8 +112,6 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
   height: propHeight,
   className = ''
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
   
   // Use responsive dimensions with fallback to props
   const { width, height, isMobile, isTablet } = useResponsiveDimensions(
@@ -121,37 +119,13 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
     propHeight || 500
   );
 
-  // Animation effect
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
-  useEffect(() => {
-    if (isVisible) {
-      // Reduce animation complexity on mobile for better performance
-      const incrementStep = isMobile ? 0.05 : 0.02;
-      const intervalTime = isMobile ? 100 : 50;
-      
-      const interval = setInterval(() => {
-        setAnimationProgress(prev => {
-          if (prev >= 1) {
-            clearInterval(interval);
-            return 1;
-          }
-          return prev + incrementStep;
-        });
-      }, intervalTime);
-      return () => clearInterval(interval);
-    }
-  }, [isVisible, isMobile]);
-
-  // Responsive dimensions and margins
+  // Enhanced responsive dimensions and margins for better mobile display
   const margin = useMemo(() => {
     if (isMobile) {
-      return { top: 30, right: 20, bottom: 50, left: 40 };
+      return { top: 25, right: 15, bottom: 45, left: 35 };
     } else if (isTablet) {
-      return { top: 35, right: 30, bottom: 55, left: 50 };
+      return { top: 30, right: 25, bottom: 50, left: 45 };
     } else {
       return { top: 40, right: 40, bottom: 60, left: 60 };
     }
@@ -177,17 +151,8 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
     [innerHeight]
   );
 
-  // Animated data based on progress
-  const animatedData = useMemo(() => {
-    return rawData.map(d => ({
-      ...d,
-      firstImpressions: d.firstImpressions * animationProgress,
-      websiteVisuals: d.websiteVisuals * animationProgress,
-      websiteSeo: d.websiteSeo * animationProgress,
-      genEngineOpt: d.genEngineOpt * animationProgress,
-      loadSpeed: d.loadSpeed * animationProgress,
-    }));
-  }, [animationProgress]);
+  // Use raw data directly without animation
+  const animatedData = rawData;
 
   return (
     <div className={`w-full ${className}`}>
@@ -207,12 +172,12 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
         </p>
       </div>
 
-      {/* Visualization Container */}
-      <div className="flex justify-center items-start overflow-x-auto px-4 sm:px-6 lg:px-0">
-        <div className="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-6 lg:space-y-0 min-w-max max-w-full">
-          {/* Main Chart */}
-          <div className="flex-shrink-0 w-full lg:w-auto">
-            <svg width={width} height={height}>
+      {/* Visualization Container - Improved mobile layout */}
+      <div className="flex justify-center items-start overflow-x-auto px-2 sm:px-4 lg:px-0">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:space-x-8 space-y-6 lg:space-y-0 w-full max-w-6xl">
+          {/* Main Chart - Ensure proper containment */}
+          <div className="flex-shrink-0 w-full lg:w-auto overflow-visible">
+            <svg width={width} height={height} className="max-w-full h-auto">
               {/* Define gradients */}
               <defs>
                 {keys.map((key) => (
@@ -245,10 +210,6 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
                         fill={`url(#gradient-${stack.key})`}
                         stroke="none"
                         strokeWidth={0}
-                        opacity={isVisible ? 1 : 0}
-                        style={{
-                          transition: 'opacity 1s ease-in-out'
-                        }}
                       />
                     ))
                   }
@@ -354,10 +315,10 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
             </svg>
           </div>
 
-          {/* Responsive Legend */}
-          <div className="flex flex-col lg:pt-8 w-full lg:w-auto lg:min-w-max overflow-x-auto lg:overflow-visible">
+          {/* Responsive Legend - Better mobile display */}
+          <div className="flex flex-col lg:pt-8 w-full lg:w-auto lg:min-w-max">
             {/* Legend */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-3 lg:space-y-3 lg:gap-0 px-2 lg:px-0 min-w-max lg:min-w-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-4 px-2 lg:px-0 justify-items-center sm:justify-items-start">
               {keys.map((key) => {
                 const labels: Record<DataKey, string> = {
                   firstImpressions: 'first impressions',
@@ -389,36 +350,36 @@ const DesignImpactVisualization: React.FC<DesignImpactVisualizationProps> = memo
         </div>
       </div>
 
-      {/* Key insights below visualization - Simplified for mobile */}
-      <div className="mt-12 text-center">
+      {/* Key insights below visualization - Enhanced mobile responsiveness */}
+      <div className="mt-8 sm:mt-12 text-center px-2">
         <div 
-          className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-xs text-zinc-600"
+          className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 lg:gap-8 text-xs sm:text-sm text-zinc-600"
           style={{ fontFamily: 'IBM Plex Mono, monospace' }}
         >
           {isMobile ? (
-            // Show most critical insights on mobile including conversion impact
+            // Mobile: Stack vertically with better spacing and ensure "100ms" is visible
             <>
-              <div>
+              <div className="text-center leading-relaxed">
                 <strong className="text-zinc-800">0.05s:</strong> 94% of first impressions are design-related
               </div>
-              <div>
-                <strong className="text-zinc-800">100ms:</strong> delay can reduce conversions by 7%
+              <div className="text-center leading-relaxed whitespace-nowrap">
+                <strong className="text-zinc-800">100 ms:</strong> delay can reduce conversions by 7%
               </div>
-              <div>
+              <div className="text-center leading-relaxed">
                 <strong className="text-zinc-800">3s:</strong> 40% of users leave if slow
               </div>
             </>
           ) : (
-            // Show all insights on larger screens
+            // Desktop: Show all insights in a row
             <>
-              <div>
+              <div className="whitespace-nowrap">
                 <strong className="text-zinc-800">0.05s:</strong> 94% of first impressions are design-related
               </div>
-              <div>
+              <div className="whitespace-nowrap">
                 <strong className="text-zinc-800">3s:</strong> 40% of users leave if page takes longer to load
               </div>
-              <div>
-                <strong className="text-zinc-800">100ms:</strong> delay can reduce conversions by 7%
+              <div className="whitespace-nowrap">
+                <strong className="text-zinc-800">100 ms:</strong> delay can reduce conversions by 7%
               </div>
             </>
           )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 interface PricingTier {
   id: string;
@@ -19,31 +19,6 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
   className = '',
   onBookCall
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [visibleTiers, setVisibleTiers] = useState<boolean[]>([false, false, false]);
-
-  // Animation effect
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (isVisible) {
-      const staggerTimer = setTimeout(() => {
-        [0, 1, 2].forEach((index) => {
-          setTimeout(() => {
-            setVisibleTiers(prev => {
-              const newState = [...prev];
-              newState[index] = true;
-              return newState;
-            });
-          }, index * 200);
-        });
-      }, 300);
-      return () => clearTimeout(staggerTimer);
-    }
-  }, [isVisible]);
 
   const pricingTiers: PricingTier[] = [
     {
@@ -127,11 +102,7 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
   return (
     <div id="pricing" className={`w-full py-16 sm:py-20 lg:py-24 ${className}`} style={{ scrollMarginTop: '80px' }}>
       {/* Section Title */}
-      <div className={`text-center mb-12 sm:mb-16 px-4 transition-all duration-1000 ease-out ${
-        isVisible 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 translate-y-8'
-      }`}>
+      <div className="text-center mb-12 sm:mb-16 px-4">
         <h3 
           className="text-fluid-3xl sm:text-fluid-4xl md:text-fluid-5xl lg:text-fluid-6xl font-bold italic text-zinc-800 mb-4 sm:mb-6 leading-tight font-cormorant"
         >
@@ -150,11 +121,7 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
           {pricingTiers.map((tier, index) => (
             <div
               key={tier.id}
-              className={`bg-white rounded-lg shadow-lg border border-stone-200 relative transition-all duration-500 ease-out flex flex-col h-full ${
-                visibleTiers[index] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              } ${tier.isPopular ? 'ring-2 ring-zinc-800 ring-offset-2' : ''}`}
+              className={`bg-white rounded-lg shadow-lg border border-stone-200 relative flex flex-col h-full ${tier.isPopular ? 'ring-2 ring-zinc-800 ring-offset-2' : ''}`}
             >
               {tier.isPopular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
@@ -250,11 +217,7 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
                     key={tier.id} 
                     className={`p-6 text-center relative ${
                       index < pricingTiers.length - 1 ? 'border-r border-stone-200' : ''
-                    } ${tier.isPopular ? 'bg-zinc-50' : ''} transition-all duration-500 ease-out ${
-                      visibleTiers[index] 
-                        ? 'opacity-100 translate-y-0' 
-                        : 'opacity-0 translate-y-8'
-                    }`}
+                    } ${tier.isPopular ? 'bg-zinc-50' : ''}`}
                   >
                     {tier.isPopular && (
                       <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-20">
@@ -303,14 +266,7 @@ const PricingStructure: React.FC<PricingStructureProps> = ({
               {Array.from(new Set(pricingTiers.flatMap(tier => tier.features))).map((feature, featureIndex) => (
                 <div 
                   key={feature} 
-                  className={`grid grid-cols-4 gap-0 hover:bg-stone-25 transition-colors duration-200 ${
-                    isVisible 
-                      ? 'opacity-100' 
-                      : 'opacity-0'
-                  }`}
-                  style={{ 
-                    transitionDelay: `${featureIndex * 50}ms`
-                  }}
+                  className="grid grid-cols-4 gap-0 hover:bg-stone-25 transition-colors duration-200"
                 >
                   <div className="p-4 border-r border-stone-200 bg-stone-25">
                     <p 

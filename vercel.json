@@ -1,13 +1,14 @@
 {
   "build": {
     "env": {
-      "NODE_OPTIONS": "--max-old-space-size=4096",
-      "VITE_BUILD_CACHE_BUST": "$VERCEL_GIT_COMMIT_SHA"
+      "NODE_OPTIONS": "--max-old-space-size=8192 --max-semi-space-size=1024",
+      "VITE_BUILD_CACHE_BUST": "$VERCEL_GIT_COMMIT_SHA",
+      "NODE_ENV": "production",
+      "GENERATE_SOURCEMAP": "false"
     }
   },
-  "buildCommand": "npm run clean && npm run build",
-  "outputDirectory": "dist",
   "framework": "vite",
+  "outputDirectory": "dist",
 
   "headers": [
     {
@@ -16,15 +17,28 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "unsafe-none"
         }
       ]
     },
     {
-      "source": "/(.*)\\.(js|css|html)$",
+      "source": "/(.*)\\.(js|css)$",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, stale-while-revalidate=86400"
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(woff2?|ttf|otf)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
@@ -42,6 +56,10 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         },
         {
           "key": "Cache-Control",

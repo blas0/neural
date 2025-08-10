@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Sequential Fade-in Animations */
+/* Essential Fade-in Animations - Only for navbar and hero */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -25,48 +25,18 @@
   animation-delay: 0.1s;
 }
 
-.fade-in-toast {
+.fade-in-hero {
   animation-delay: 0.3s;
 }
 
-.fade-in-hero {
-  animation-delay: 0.5s;
-}
-
-.fade-in-noise {
-  animation-delay: 0.7s;
-}
-
-.fade-in-services {
-  animation-delay: 0.9s;
-}
-
-.fade-in-roadmap {
-  animation-delay: 1.1s;
-}
-
-.fade-in-pricing {
-  animation-delay: 1.3s;
-}
-
-.fade-in-footer {
-  animation-delay: 1.5s;
-}
-
-/* Mobile optimization - faster animations for thumb-first users */
+/* Mobile optimization - faster animations */
 @media (max-width: 768px) {
   .fade-in-sequential {
     animation-duration: 0.6s;
   }
   
   .fade-in-nav { animation-delay: 0.05s; }
-  .fade-in-toast { animation-delay: 0.2s; }
-  .fade-in-hero { animation-delay: 0.3s; }
-  .fade-in-noise { animation-delay: 0.5s; }
-  .fade-in-services { animation-delay: 0.7s; }
-  .fade-in-roadmap { animation-delay: 0.9s; }
-  .fade-in-pricing { animation-delay: 1.1s; }
-  .fade-in-footer { animation-delay: 1.3s; }
+  .fade-in-hero { animation-delay: 0.2s; }
 }
 
 @media (max-width: 480px) {
@@ -129,131 +99,19 @@
   }
 }
 
-/* Professional Animated Gradient Dividing Line */
+/* Simple Gradient Divider - No animation */
 .gradient-divider {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(24, 24, 27, 0.08) 15%,
-    rgba(24, 24, 27, 0.2) 25%,
-    rgba(39, 39, 42, 0.4) 35%,
-    rgba(63, 63, 70, 0.6) 45%,
-    rgba(82, 82, 91, 0.8) 50%,
-    rgba(63, 63, 70, 0.6) 55%,
-    rgba(39, 39, 42, 0.4) 65%,
-    rgba(24, 24, 27, 0.2) 75%,
-    rgba(24, 24, 27, 0.08) 85%,
+    rgba(63, 63, 70, 0.3) 25%,
+    rgba(82, 82, 91, 0.6) 50%,
+    rgba(63, 63, 70, 0.3) 75%,
     transparent 100%
   );
-  background-size: 200% 100%;
-  animation: gradientFlow 4s ease-in-out infinite;
 }
 
-@keyframes gradientFlow {
-  0% {
-    background-position: 0% 50%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(24, 24, 27, 0.08) 15%,
-      rgba(24, 24, 27, 0.2) 25%,
-      rgba(39, 39, 42, 0.4) 35%,
-      rgba(63, 63, 70, 0.6) 45%,
-      rgba(82, 82, 91, 0.8) 50%,
-      rgba(63, 63, 70, 0.6) 55%,
-      rgba(39, 39, 42, 0.4) 65%,
-      rgba(24, 24, 27, 0.2) 75%,
-      rgba(24, 24, 27, 0.08) 85%,
-      transparent 100%
-    );
-  }
-  25% {
-    background-position: 25% 50%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(39, 39, 42, 0.1) 15%,
-      rgba(63, 63, 70, 0.25) 25%,
-      rgba(82, 82, 91, 0.45) 35%,
-      rgba(113, 113, 122, 0.65) 45%,
-      rgba(161, 161, 170, 0.85) 50%,
-      rgba(113, 113, 122, 0.65) 55%,
-      rgba(82, 82, 91, 0.45) 65%,
-      rgba(63, 63, 70, 0.25) 75%,
-      rgba(39, 39, 42, 0.1) 85%,
-      transparent 100%
-    );
-  }
-  50% {
-    background-position: 50% 50%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(63, 63, 70, 0.12) 15%,
-      rgba(82, 82, 91, 0.28) 25%,
-      rgba(113, 113, 122, 0.48) 35%,
-      rgba(161, 161, 170, 0.68) 45%,
-      rgba(244, 244, 245, 0.9) 50%,
-      rgba(161, 161, 170, 0.68) 55%,
-      rgba(113, 113, 122, 0.48) 65%,
-      rgba(82, 82, 91, 0.28) 75%,
-      rgba(63, 63, 70, 0.12) 85%,
-      transparent 100%
-    );
-  }
-  75% {
-    background-position: 75% 50%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(39, 39, 42, 0.1) 15%,
-      rgba(63, 63, 70, 0.25) 25%,
-      rgba(82, 82, 91, 0.45) 35%,
-      rgba(113, 113, 122, 0.65) 45%,
-      rgba(161, 161, 170, 0.85) 50%,
-      rgba(113, 113, 122, 0.65) 55%,
-      rgba(82, 82, 91, 0.45) 65%,
-      rgba(63, 63, 70, 0.25) 75%,
-      rgba(39, 39, 42, 0.1) 85%,
-      transparent 100%
-    );
-  }
-  100% {
-    background-position: 100% 50%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(24, 24, 27, 0.08) 15%,
-      rgba(24, 24, 27, 0.2) 25%,
-      rgba(39, 39, 42, 0.4) 35%,
-      rgba(63, 63, 70, 0.6) 45%,
-      rgba(82, 82, 91, 0.8) 50%,
-      rgba(63, 63, 70, 0.6) 55%,
-      rgba(39, 39, 42, 0.4) 65%,
-      rgba(24, 24, 27, 0.2) 75%,
-      rgba(24, 24, 27, 0.08) 85%,
-      transparent 100%
-    );
-  }
-}
-
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .gradient-divider {
-    animation: none;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(63, 63, 70, 0.3) 25%,
-      rgba(82, 82, 91, 0.6) 50%,
-      rgba(63, 63, 70, 0.3) 75%,
-      transparent 100%
-    );
-    background-size: 100% 100%;
-  }
-}
-
-/* Animated Footer with Cycling Glyphs */
+/* Simplified Footer - No complex animations */
 .footer-animated {
   font-family: 'IBM Plex Mono', monospace;
   position: relative;
@@ -266,27 +124,15 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.95em;
   letter-spacing: 0.025em;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 }
 
-/* Subtle hover effect for the personal message */
+/* Simple hover effect for the personal message */
 .footer-animated:hover span:last-child {
   color: rgb(214, 211, 209) !important;
-  transform: translateY(-1px);
 }
 
-/* Optional: Add a subtle pulse to the word "luv" for playful touch */
-@keyframes lovePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-.footer-animated span:last-child {
-  animation: lovePulse 3s ease-in-out infinite;
-  animation-delay: 2s;
-}
-
-/* Top Border */
+/* Static decorative borders */
 .footer-animated::before {
   content: '⦾ ⦿ ❋ ❊ ✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
   position: absolute;
@@ -298,14 +144,12 @@
   font-size: 10px;
   line-height: 12px;
   letter-spacing: 3px;
-  color: rgba(168, 162, 158, 0.6);
+  color: rgba(168, 162, 158, 0.4);
   pointer-events: none;
-  animation: topBorderCycle 4s ease-in-out infinite;
   overflow: hidden;
   white-space: nowrap;
 }
 
-/* Bottom Border */
 .footer-animated::after {
   content: '⦿ ⦾ ❊ ❋ ✴ ✳ ✲ ✱ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
   position: absolute;
@@ -317,102 +161,12 @@
   font-size: 10px;
   line-height: 12px;
   letter-spacing: 3px;
-  color: rgba(168, 162, 158, 0.6);
+  color: rgba(168, 162, 158, 0.4);
   pointer-events: none;
-  animation: bottomBorderCycle 4s ease-in-out infinite 2s;
   overflow: hidden;
   white-space: nowrap;
 }
 
-/* Left and Right borders removed for single-layer design */
-
-/* Left and Right border keyframes removed */
-
-@keyframes topBorderCycle {
-  0% { 
-    content: '⦾ ⦿ ❋ ❊ ✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-  12.5% { 
-    opacity: 0.2;
-  }
-  25% { 
-    content: '✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆ ⦿ ⦾ ❋ ❊';
-    opacity: 1;
-  }
-  37.5% { 
-    opacity: 0.2;
-  }
-  50% { 
-    content: '✦ ✧ ※ ⋆ ★ ☆ ◆ ◇ ○ ● ◦ ◉ ✱ ✲ ✳ ✴ ⦾ ⦿ ❋ ❊';
-    opacity: 1;
-  }
-  62.5% { 
-    opacity: 0.2;
-  }
-  75% { 
-    content: '✴ ✳ ✲ ✱ ⦾ ⦿ ❋ ❊ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-  87.5% { 
-    opacity: 0.2;
-  }
-  100% { 
-    content: '⦾ ⦿ ❋ ❊ ✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-}
-
-@keyframes bottomBorderCycle {
-  0% { 
-    content: '⦿ ⦾ ❊ ❋ ✴ ✳ ✲ ✱ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-  12.5% { 
-    opacity: 0.2;
-  }
-  25% { 
-    content: '✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆ ⦾ ⦿ ❊ ❋';
-    opacity: 1;
-  }
-  37.5% { 
-    opacity: 0.2;
-  }
-  50% { 
-    content: '• · ✵ ✶ ✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-  62.5% { 
-    opacity: 0.2;
-  }
-  75% { 
-    content: '◉ ◦ ● ○ ◇ ◆ ✴ ✳ ✲ ✱ · • ☆ ★ ⋆ ※ ✧ ✦ ◉ ◦';
-    opacity: 1;
-  }
-  87.5% { 
-    opacity: 0.2;
-  }
-  100% { 
-    content: '⦿ ⦾ ❊ ❋ ✴ ✳ ✲ ✱ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .footer-animated::before,
-  .footer-animated::after {
-    animation: none;
-    opacity: 0.4;
-  }
-  
-  .footer-animated::before {
-    content: '⦾ ⦿ ❋ ❊ ✱ ✲ ✳ ✴ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-  }
-  
-  .footer-animated::after {
-    content: '⦿ ⦾ ❊ ❋ ✴ ✳ ✲ ✱ ◆ ◇ ○ ● ◦ ◉ ✦ ✧ ※ ⋆ ★ ☆';
-  }
-}
 
 /* Booking Popover Smooth Animations */
 @keyframes popover-backdrop-enter {
@@ -617,44 +371,54 @@
   touch-action: manipulation;
 }
 
-/* Navbar-specific mobile optimizations */
+/* FIXED: Enhanced navbar-specific mobile optimizations */
 @media (max-width: 1023px) {
   .navbar-mobile-optimized nav {
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
   }
   
-  /* Prevent mobile menu from creating horizontal scrollbars */
+  /* FIXED: Prevent mobile menu from creating horizontal scrollbars with better safe area handling */
   .mobile-menu-panel {
-    max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
-    right: env(safe-area-inset-right, 0);
+    max-width: calc(85vw - env(safe-area-inset-right, 0px)) !important;
+    right: env(safe-area-inset-right, 0px);
+    /* FIXED: Ensure proper z-index stacking */
+    z-index: 1101 !important;
+    will-change: transform;
+    contain: layout style;
   }
   
-  /* Optimize mobile scrolling performance */
+  /* FIXED: Optimize mobile scrolling performance with better overflow handling */
   .mobile-scroll-optimized {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .mobile-scroll-optimized::-webkit-scrollbar {
+    display: none; /* Webkit browsers */
   }
 }
 
-/* Safe Area Utilities for Mobile Devices */
+/* FIXED: Better safe area utilities for mobile devices */
 .pt-safe-top {
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: max(env(safe-area-inset-top, 0px), 0px);
 }
 
 .pb-safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
 }
 
 .pl-safe-left {
-  padding-left: env(safe-area-inset-left, 0px);
+  padding-left: max(env(safe-area-inset-left, 0px), 0px);
 }
 
 .pr-safe-right {
-  padding-right: env(safe-area-inset-right, 0px);
+  padding-right: max(env(safe-area-inset-right, 0px), 0px);
 }
 
-/* Hide scrollbars while maintaining scroll functionality */
+/* FIXED: Enhanced scrollbar hiding */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -664,27 +428,70 @@
   display: none;
 }
 
-/* Prevent horizontal scrolling issues */
+/* FIXED: Prevent horizontal scrolling issues with better containment */
 .prevent-horizontal-scroll {
   overflow-x: hidden !important;
   max-width: 100vw !important;
+  contain: layout;
 }
 
-/* Layout stability for animations */
+/* FIXED: Layout stability for animations with better GPU utilization */
 .layout-stable {
-  contain: layout style;
+  contain: layout style paint;
   will-change: auto;
+  transform: translateZ(0); /* Force GPU acceleration when needed */
 }
 
-/* Mobile navigation optimizations */
-@media (max-width: 1023px) {
+/* FIXED: Mobile navigation optimizations aligned with new breakpoints */
+@media (max-width: 639px) { /* Align with new mobile breakpoint (< 640px) */
   /* Reduce animation complexity on smaller screens */
   .navbar-mobile-optimized {
-    transition: opacity 150ms ease-out;
+    transition: opacity 150ms ease-out, transform 150ms ease-out;
+    will-change: opacity, transform;
   }
   
   /* Prevent zoom on mobile inputs */
   input, textarea, select {
     font-size: 16px !important;
   }
+  
+  /* FIXED: Better mobile menu backdrop handling */
+  .mobile-menu-backdrop {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    /* Better iOS support */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* FIXED: Tablet-specific optimizations for the 640px-1024px range */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .navbar-mobile-optimized {
+    /* Enhanced backdrop blur for tablets */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .mobile-menu-panel {
+    /* Better width handling for tablets */
+    max-width: min(400px, 80vw);
+  }
+}
+
+/* FIXED: Z-index management layer for proper stacking */
+.z-navbar {
+  z-index: 1050;
+}
+
+.z-mobile-menu {
+  z-index: 1100;
+}
+
+.z-mobile-menu-panel {
+  z-index: 1101;
+}
+
+.z-mobile-menu-content {
+  z-index: 1102;
 }

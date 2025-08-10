@@ -126,7 +126,7 @@ export const preloadOnInteraction = () => {
   const navButtons = document.querySelectorAll('[data-section="pricing"], [data-section="roadmap"]');
   
   navButtons.forEach(button => {
-    let hoverTimeout: NodeJS.Timeout;
+    let hoverTimeout: ReturnType<typeof setTimeout>;
     
     button.addEventListener('mouseenter', () => {
       hoverTimeout = setTimeout(() => {

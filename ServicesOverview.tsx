@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { ServicesOverviewProps, Service } from './ServicesOverview.types';
 
 const ServicesOverview: React.FC<ServicesOverviewProps> = ({
@@ -6,8 +6,6 @@ const ServicesOverview: React.FC<ServicesOverviewProps> = ({
   sectionTitle = "Our Website Services",
   onServiceCTA
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [visibleCards, setVisibleCards] = useState<boolean[]>([false, false, false]);
   const sectionRef = useRef<HTMLElement>(null);
 
   const services: Service[] = [
@@ -40,31 +38,6 @@ const ServicesOverview: React.FC<ServicesOverviewProps> = ({
     }
   ];
 
-  // Sequential fade-in animation after value proposition section
-  useEffect(() => {
-    // Calculate timing: navbar(600) + hero(1000) + data noise(800) + overview section(400) + overview cards(5*150) = 3550ms
-    const sectionTimer = setTimeout(() => {
-      setIsVisible(true);
-    }, 3550);
-
-    // Stagger service card animations after section is visible
-    const cardTimer = setTimeout(() => {
-      services.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleCards(prev => {
-            const newState = [...prev];
-            newState[index] = true;
-            return newState;
-          });
-        }, index * 200);
-      });
-    }, 3750); // Start cards 200ms after section
-
-    return () => {
-      clearTimeout(sectionTimer);
-      clearTimeout(cardTimer);
-    };
-  }, []);
 
   const getIcon = (iconType: string) => {
     const iconClasses = "w-10 h-10";
@@ -109,11 +82,7 @@ const ServicesOverview: React.FC<ServicesOverviewProps> = ({
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
-        <div className={`text-center mb-16 transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="text-center mb-16">
           <h2 
             id="services-overview-title"
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold italic text-zinc-800 mb-6 leading-tight"
@@ -128,11 +97,7 @@ const ServicesOverview: React.FC<ServicesOverviewProps> = ({
           {services.map((service, index) => (
             <div
               key={service.id}
-              className={`relative bg-white rounded-xl p-8 shadow-sm border border-stone-200 transition-all duration-500 ease-out ${
-                visibleCards[index] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-12'
-              }`}
+              className="relative bg-white rounded-xl p-8 shadow-sm border border-stone-200"
             >
               {/* Icon */}
               <div className="flex items-center justify-center w-20 h-20 bg-zinc-100 rounded-xl mb-6">
@@ -208,11 +173,7 @@ const ServicesOverview: React.FC<ServicesOverviewProps> = ({
         </div>
 
         {/* Bottom CTA Section */}
-        <div className={`text-center mt-16 transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="text-center mt-16">
           <div className="inline-flex items-center justify-center p-6 bg-white rounded-xl shadow-sm border border-stone-200">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">

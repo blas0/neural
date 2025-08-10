@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, memo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { HeatmapRect } from '@visx/heatmap';
 import { scaleLinear, scaleBand } from '@visx/scale';
 import { Group } from '@visx/group';
@@ -102,35 +102,6 @@ const RoadmapJourney: React.FC<RoadmapJourneyProps> = memo(({
   className = '',
   fullscreen = false
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
-
-  // Animation effect
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (isVisible) {
-      // Reduce animation complexity on mobile for better performance
-      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-      const isMobile = windowWidth < 768;
-      const incrementStep = isMobile ? 0.1 : 0.03;
-      const intervalTime = isMobile ? 100 : 50;
-      
-      const interval = setInterval(() => {
-        setAnimationProgress(prev => {
-          if (prev >= 1) {
-            clearInterval(interval);
-            return 1;
-          }
-          return prev + incrementStep;
-        });
-      }, intervalTime);
-      return () => clearInterval(interval);
-    }
-  }, [isVisible]);
 
   const data = useMemo(() => generateRoadmapData(), []);
 
@@ -230,7 +201,7 @@ const RoadmapJourney: React.FC<RoadmapJourneyProps> = memo(({
                     height={cellHeight}
                     rx={isMobile ? 2 : 4}
                     fill={(() => {
-                      const intensity = d.intensity * animationProgress;
+                      const intensity = d.intensity;
                       if (!d.isActive) {
                         // Grayed out future phases
                         return `rgba(156, 163, 175, ${0.3 + intensity * 0.2})`;
@@ -243,10 +214,6 @@ const RoadmapJourney: React.FC<RoadmapJourneyProps> = memo(({
                       // Active phases with full color
                       return colorScale(intensity);
                     })()}
-                    opacity={isVisible ? 1 : 0}
-                    style={{
-                      transition: 'opacity 1s ease-in-out'
-                    }}
                   />
                 ))}
 
@@ -307,10 +274,6 @@ const RoadmapJourney: React.FC<RoadmapJourneyProps> = memo(({
                   y2={innerHeight + (isMobile ? 30 : 35)}
                   stroke="#D1D5DB"
                   strokeWidth={1}
-                  opacity={isVisible ? 1 : 0}
-                  style={{
-                    transition: 'opacity 1s ease-in-out'
-                  }}
                 />
 
                 {/* Launch indicator */}

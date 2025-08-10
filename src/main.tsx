@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '../App.tsx'
+import ErrorBoundary from './components/ErrorBoundary'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>,
 )
 
@@ -16,10 +19,10 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       .then((registration) => {
         console.log('SW registered: ', registration);
         
-        // Check for updates every 60 seconds
+        // Check for updates every 10 minutes to reduce network overhead
         setInterval(() => {
           registration.update();
-        }, 60000);
+        }, 600000);
       })
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError);

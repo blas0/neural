@@ -5,25 +5,29 @@
   "main": "HeroSection.tsx",
   "type": "module",
   "engines": {
-    "node": "22.x"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "dev": "vite",
     "dev:fresh": "npm run clean && vite",
     "dev:clear": "vite --force",
-    "build": "tsc && vite build",
-    "build:analyze": "tsc && vite build --mode analyze",
+    "build": "npm run type-check && vite build",
+    "build:ci": "vite build",
+    "build:analyze": "npm run type-check && vite build --mode analyze",
     "build:fast": "vite build --mode development",
+    "build:prod": "NODE_ENV=production npm run type-check && vite build --mode production",
     "preview": "vite preview",
     "preview:dist": "vite preview --port 3000",
     "clean": "rm -rf dist .tsbuildinfo node_modules/.vite",
-    "clean:all": "rm -rf dist .tsbuildinfo node_modules/.vite && npm cache clean --force",
-    "type-check": "tsc --noEmit"
+    "clean:all": "rm -rf dist .tsbuildinfo node_modules/.vite node_modules/.cache && npm cache clean --force",
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "postinstall": "npm run type-check",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.15",
     "@hookform/resolvers": "^5.2.1",
-    "@vercel/node": "^5.3.11",
+    "@vercel/node": "^3.2.26",
     "@visx/axis": "^3.12.0",
     "@visx/curve": "^3.12.0",
     "@visx/gradient": "^3.12.0",
@@ -35,20 +39,21 @@
     "dotenv": "^17.2.1",
     "isomorphic-dompurify": "^2.26.0",
     "lucide-react": "^0.536.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.62.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react": "^4.0.0",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5.0.0",
-    "vite": "^4.4.0"
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.11"
   }
 }

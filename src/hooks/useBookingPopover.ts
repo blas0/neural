@@ -27,7 +27,7 @@ export const useBookingPopover = (): UseBookingPopoverReturn => {
   const [animationState, setAnimationState] = useState<AnimationState>('closed');
   const [defaultTier, setDefaultTier] = useState<'tier-1' | 'tier-2' | 'tier-3' | undefined>();
   const triggerElementRef = useRef<HTMLElement | null>(null);
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Cleanup timeout on unmount
   useEffect(() => {

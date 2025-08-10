@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { ValuePropositionProps, Differentiator } from './ValueProposition.types';
 
 const ValueProposition: React.FC<ValuePropositionProps> = ({
@@ -7,8 +7,6 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
   guaranteeText = "30-day money-back guarantee - if you're not completely satisfied",
   onLearnMore
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [visibleCards, setVisibleCards] = useState<boolean[]>([false, false, false, false]);
   const sectionRef = useRef<HTMLElement>(null);
 
   const differentiators: Differentiator[] = [
@@ -38,31 +36,6 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
     }
   ];
 
-  // Sequential fade-in animation after hero section
-  useEffect(() => {
-    // Trigger section animation after hero + data noise section (2.4s total: 600ms navbar + 1000ms hero + 800ms data noise)
-    const sectionTimer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2400);
-
-    // Stagger card animations after section is visible
-    const cardTimer = setTimeout(() => {
-      differentiators.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleCards(prev => {
-            const newState = [...prev];
-            newState[index] = true;
-            return newState;
-          });
-        }, index * 150);
-      });
-    }, 2600); // Start cards 200ms after section
-
-    return () => {
-      clearTimeout(sectionTimer);
-      clearTimeout(cardTimer);
-    };
-  }, []);
 
   const getIcon = (iconType: string) => {
     const iconClasses = "w-8 h-8";
@@ -114,11 +87,7 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
-        <div className={`text-center mb-16 transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="text-center mb-16">
           <h2 
             id="value-proposition-title"
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold italic text-zinc-800 mb-6 leading-tight"
@@ -133,11 +102,7 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
           {differentiators.map((item, index) => (
             <div
               key={item.id}
-              className={`relative bg-white rounded-xl p-6 shadow-sm border border-stone-200 transition-all duration-500 ease-out ${
-                visibleCards[index] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-12'
-              }`}
+              className="relative bg-white rounded-xl p-6 shadow-sm border border-stone-200"
             >
               {/* Icon */}
               <div className="flex items-center justify-center w-16 h-16 bg-zinc-100 rounded-lg mb-4">
@@ -165,11 +130,7 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
         </div>
 
         {/* Before/After Mockup Section */}
-        <div className={`bg-white rounded-2xl p-8 shadow-sm border border-stone-200 mb-12 transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-12'
-        }`}>
+        <div className="bg-white rounded-2xl p-8 shadow-sm border border-stone-200 mb-12">
           <div className="text-center mb-8">
             <h3 
               className="text-2xl sm:text-3xl md:text-4xl font-bold italic text-zinc-800 mb-4"
@@ -245,11 +206,7 @@ const ValueProposition: React.FC<ValuePropositionProps> = ({
         </div>
 
         {/* Risk Reversal/Guarantee */}
-        <div className={`text-center transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="text-center">
           <div className="inline-flex items-center justify-center p-6 bg-white rounded-xl shadow-sm border border-green-200">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">

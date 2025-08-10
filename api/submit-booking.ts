@@ -8,7 +8,9 @@ const getAirtable = async () => {
   return Airtable;
 };
 
-// Rate limiting store (in production, use Redis or similar)
+// CRITICAL: In-memory rate limiting doesn't work in serverless environments
+// These Maps reset on each cold start, making rate limiting ineffective
+// TODO: Replace with Redis, KV store, or remove for production
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const emailLimitStore = new Map<string, { count: number; resetTime: number }>();
 
@@ -240,10 +242,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set JSON content type first
   res.setHeader('Content-Type', 'application/json');
   
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS headers - restrict to production domain for security
+  const allowedOrigins = [
+    'https://neural-kappa.vercel.app',
+    'https://www.neural.com', // Replace with your actual domain
+    ...(process.env.NODE_ENV === 'development' ? ['http://localhost:5173', 'http://localhost:3000'] : [])
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin as string)) {
+    res.setHeader('Access-Control-Allow-Origin', origin as string);
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'false');
 
   try {
     // Handle preflight request

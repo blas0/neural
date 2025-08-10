@@ -7,31 +7,48 @@ export default defineConfig({
     postcss: './postcss.config.js',
   },
   build: {
-    // Reduce chunk size warning for better mobile performance
-    chunkSizeWarningLimit: 500,
+    // Increase chunk size warning limit to reduce noise
+    chunkSizeWarningLimit: 600,
     
-    // Enable source maps for better debugging in production
-    sourcemap: false, // Set to true for staging/debug builds
+    // Disable source maps for production builds for better performance
+    sourcemap: false,
     
-    // Optimize build output for mobile
+    // Enhanced build optimization
     minify: 'esbuild',
-    target: 'es2020',
+    target: ['es2022', 'chrome100', 'safari15', 'firefox100', 'edge100'],
     
-    // Optimize for mobile loading
+    // CSS optimization
     cssMinify: 'esbuild',
     cssCodeSplit: true,
     
+    // Enable build caching
+    emptyOutDir: true,
+    copyPublicDir: true,
+    
     rollupOptions: {
       output: {
-        // Manual chunk splitting for better caching
-        manualChunks: {
-          // Vendor chunks for better caching and mobile performance
-          'react-vendor': ['react', 'react-dom'],
-          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          'ui-vendor': ['lucide-react'],
-          'floating-ui': ['@floating-ui/react'],
-          'visx-core': ['@visx/axis', '@visx/curve', '@visx/gradient', '@visx/group'],
-          'visx-heavy': ['@visx/heatmap', '@visx/scale', '@visx/shape'],
+        // Optimized manual chunk splitting to avoid empty chunks
+        manualChunks: (id) => {
+          // React core
+          if (id.includes('node_modules') && (id.includes('react') || id.includes('react-dom'))) {
+            return 'react-vendor';
+          }
+          // Form libraries
+          if (id.includes('node_modules') && (id.includes('react-hook-form') || id.includes('@hookform/resolvers') || id.includes('zod'))) {
+            return 'form-vendor';
+          }
+          // UI libraries
+          if (id.includes('node_modules') && (id.includes('lucide-react') || id.includes('@floating-ui'))) {
+            return 'ui-vendor';
+          }
+          // ViSX visualization libraries
+          if (id.includes('node_modules') && id.includes('@visx')) {
+            return 'visx-vendor';
+          }
+          // Other large vendor dependencies
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
         
         // Optimize chunk file names for better caching
@@ -71,22 +88,6 @@ export default defineConfig({
       'Expires': '0',
       'Surrogate-Control': 'no-store'
     },
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('proxy error', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-          });
-        },
-      }
-    }
+    // Removed API proxy - conflicts with Vercel serverless functions
   }
 })

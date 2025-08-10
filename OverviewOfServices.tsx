@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import DesignImpactVisualization from './src/components/DesignImpactVisualization';
 import { OverviewOfServicesProps, ServiceCard } from './OverviewOfServices.types';
 
@@ -7,8 +7,6 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
   sectionTitle = "an overview of services",
   onLearnMore
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [visibleCards, setVisibleCards] = useState<boolean[]>([false, false, false, false, false]);
   const sectionRef = useRef<HTMLElement>(null);
 
   const serviceCards: ServiceCard[] = [
@@ -39,31 +37,6 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
     }
   ];
 
-  // Sequential fade-in animation after hero section
-  useEffect(() => {
-    // Trigger section animation after hero + data noise section (2.4s total: 600ms navbar + 1000ms hero + 800ms data noise)
-    const sectionTimer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2400);
-
-    // Stagger card animations after section is visible
-    const cardTimer = setTimeout(() => {
-      serviceCards.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleCards(prev => {
-            const newState = [...prev];
-            newState[index] = true;
-            return newState;
-          });
-        }, index * 150);
-      });
-    }, 2600); // Start cards 200ms after section
-
-    return () => {
-      clearTimeout(sectionTimer);
-      clearTimeout(cardTimer);
-    };
-  }, []);
 
   const handleLearnMore = () => {
     if (onLearnMore) {
@@ -80,11 +53,7 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
-        <div className={`text-center mb-12 sm:mb-16 transition-all duration-1000 ease-out ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="text-center mb-12 sm:mb-16">
           <h2 
             id="overview-services-title"
             className="text-fluid-3xl sm:text-fluid-4xl md:text-fluid-5xl lg:text-fluid-6xl font-bold italic text-zinc-800 mb-4 sm:mb-6 leading-tight font-cormorant px-2"
@@ -98,11 +67,7 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
           {serviceCards.map((card, index) => (
             <div
               key={card.id}
-              className={`transition-all duration-500 ease-out px-2 ${
-                visibleCards[index] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-12'
-              }`}
+              className="px-2"
             >
               {/* Card Title */}
               <h3 
@@ -123,11 +88,7 @@ const OverviewOfServices: React.FC<OverviewOfServicesProps> = ({
 
         {/* Research Insights Section */}
         {/* Data Visualization Section */}
-        <div className={`mt-12 sm:mt-20 transition-all duration-1000 ease-out delay-1000 ${
-          isVisible 
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="mt-12 sm:mt-20">
           {/* Responsive chart container */}
           <div className="w-full overflow-x-hidden bg-stone-50">
             <div className="w-full max-w-none mx-auto">

@@ -43,21 +43,53 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache with network fallback
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
   // Skip non-GET requests
   if (event.request.method !== 'GET') {
     return;
   }
 
-  // Skip external requests (fonts, APIs, etc.)
-  const url = new URL(event.request.url);
-  if (url.origin !== location.origin) {
+  // Skip external requests and API routes
+  if (url.origin !== location.origin || url.pathname.startsWith('/api/')) {
+    return;
+  }
+
+  // Skip dynamic content that should never be cached
+  const skipCachePatterns = [
+    '/api/',
+    '/_next/webpack-hmr',
+    '/__nextjs',
+    '/hot-update',
+    '.hot-update.'
+  ];
+  
+  if (skipCachePatterns.some(pattern => url.pathname.includes(pattern))) {
     return;
   }
 
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Return cached version if available
+        // For HTML documents, use stale-while-revalidate strategy
+        if (event.request.destination === 'document') {
+          const networkFetch = fetch(event.request)
+            .then((networkResponse) => {
+              if (networkResponse.status === 200) {
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME)
+                  .then((cache) => {
+                    cache.put(event.request, responseToCache);
+                  });
+              }
+              return networkResponse;
+            })
+            .catch(() => response); // Fallback to cached version if network fails
+
+          return response || networkFetch;
+        }
+
+        // For assets, serve from cache first, then network
         if (response) {
           console.log('Serving from cache:', event.request.url);
           return response;
@@ -66,25 +98,32 @@ self.addEventListener('fetch', (event) => {
         // Otherwise fetch from network
         return fetch(event.request)
           .then((response) => {
-            // Don't cache non-successful responses
+            // Only cache successful responses for static assets
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
 
-            // Clone the response for caching
-            const responseToCache = response.clone();
+            // Only cache static assets (CSS, JS, images)
+            const contentType = response.headers.get('content-type') || '';
+            const shouldCache = contentType.includes('text/css') ||
+                               contentType.includes('application/javascript') ||
+                               contentType.includes('image/') ||
+                               url.pathname.includes('/assets/');
 
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                console.log('Caching new resource:', event.request.url);
-                cache.put(event.request, responseToCache);
-              });
+            if (shouldCache) {
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then((cache) => {
+                  console.log('Caching new resource:', event.request.url);
+                  cache.put(event.request, responseToCache);
+                });
+            }
 
             return response;
           })
           .catch((error) => {
             console.error('Fetch failed:', error);
-            // Return a basic offline page or message
+            // Return a basic offline page for document requests
             if (event.request.destination === 'document') {
               return new Response(
                 '<h1>Offline</h1><p>Please check your internet connection.</p>',
